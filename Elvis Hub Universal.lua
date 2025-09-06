@@ -1114,3 +1114,10 @@ GamesTab:CreateButton({
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/SuperHackerYT/ElvisHub/refs/heads/main/ElvisHubBloxFruits.lua"))()
     end
 })
+
+GameTab:CreateButton({
+    Text = "Fisch",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/ElvisHub/refs/heads/main/Fisch.lua"))()
+    end
+})

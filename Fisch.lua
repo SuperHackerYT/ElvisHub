@@ -4,7 +4,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
 	Title = "Elvis Hub",
-	SubTitle = "discord.gg/25ms",
+	SubTitle = "https://discord.gg/7zyT99D7S3",
 	TabWidth = 160,
 	Size = UDim2.fromOffset(550, 350),
 	Acrylic = false, 

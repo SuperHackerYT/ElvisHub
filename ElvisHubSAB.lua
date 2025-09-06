@@ -59,7 +59,7 @@ local function gradient(text, startColor, endColor)
 end
 
 WindUI:Popup({
-    Title = gradient("Zynoxis Scripts", Color3.fromHex("#6A11CB"), Color3.fromHex("#2575FC")),
+    Title = gradient("Elvis Gaming", Color3.fromHex("#6A11CB"), Color3.fromHex("#2575FC")),
     Icon = "zap",
     Content = "loc:Elvis Hub - Steal A Brainrot",
     Buttons = {

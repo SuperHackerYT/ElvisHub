@@ -3,7 +3,7 @@ local summitLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Sup
 
 -- Main Window
 local window = summitLib:CreateWindow({
-    Name = "Elvis Hub Universal",
+    Name = "Elvis Hub V3",
     AccentColor3 = Color3.new(0, 0.6, 1)
 })
 
@@ -840,7 +840,7 @@ MoveTab:CreateBind({
 })
 
 ---------------------------------------------------
--- 4. Hover / Air Walk
+-- 4. Hover Mode
 local Hover = false
 MoveTab:CreateToggle({
     Text = "Hover Mode",
@@ -932,7 +932,92 @@ RunService.Stepped:Connect(function()
     end
 end)
 
--- Server / Misc Tab
+-- AC Bypassed Hacks Tab
+
+---------------------------------------------------
+-- Speed Bypass
+local wsBypassEnabled = false
+local wsBypassSpeed = 16
+local wsPushPart
+local wsConn
+
+local ACBypassTab = window:CreateTab({
+    Name = "AC Bypass",
+    Icon = "rbxassetid://7743875263"
+})
+
+ACBypassTab:CreateSlider({
+    Text = "Bypassed Speed Hack (BUGGY)",
+    Default = 16,
+    Minimum = 16,
+    Maximum = 100,
+    Callback = function(Value)
+        wsBypassSpeed = Value
+        if Value > 16 then
+            if not wsBypassEnabled then
+                wsBypassEnabled = true
+                local char = lp.Character or lp.CharacterAdded:Wait()
+                local hrp = char:WaitForChild("HumanoidRootPart")
+                local hum = char:WaitForChild("Humanoid")
+
+                wsPushPart = Instance.new("Part")
+                wsPushPart.Anchored = true
+                wsPushPart.Transparency = 1
+                wsPushPart.CanCollide = false
+                wsPushPart.Size = Vector3.new(2,2,1)
+                wsPushPart.Name = "Block-ef0024"
+                wsPushPart.Parent = workspace
+
+                wsConn = RunService.Heartbeat:Connect(function()
+                    if wsBypassEnabled and hrp and wsPushPart and hum then
+                        local moveDir = hum.MoveDirection
+                        if moveDir.Magnitude > 0 then
+                            local forward = hrp.CFrame.LookVector
+                            wsPushPart.CFrame = hrp.CFrame * CFrame.new(0,0,2)
+                            hrp.Velocity = hrp.Velocity + (forward * (wsBypassSpeed - 16))
+                        end
+                    end
+                end)
+            end
+        else
+            wsBypassEnabled = false
+            if wsPushPart then wsPushPart:Destroy() wsPushPart = nil end
+            if wsConn then wsConn:Disconnect() wsConn = nil end
+        end
+    end
+})
+
+---------------------------------------------------
+-- Jump Hack Bypass
+local jumpBypassEnabled = false
+local jumpBoost = 75
+local jumpConn
+
+ACBypassTab:CreateToggle({
+    Text = "Bypassed High Jump",
+    Default = false,
+    Callback = function(Value)
+        jumpBypassEnabled = Value
+        local char = lp.Character or lp.CharacterAdded:Wait()
+        local hum = char:WaitForChild("Humanoid")
+
+        if jumpBypassEnabled then
+            jumpConn = hum.Jumping:Connect(function(active)
+                if active then
+                    local hrp = char:WaitForChild("HumanoidRootPart")
+                    hrp.Velocity = hrp.Velocity + Vector3.new(0, jumpBoost, 0)
+                end
+            end)
+        else
+            if jumpConn then
+                jumpConn:Disconnect()
+                jumpConn = nil
+            end
+        end
+    end
+})
+
+-- Server Tab
 local ServerTab = window:CreateTab({
     Name = "Server",
     Icon = "rbxassetid://7733954760"

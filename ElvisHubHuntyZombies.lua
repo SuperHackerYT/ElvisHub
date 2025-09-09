@@ -4,6 +4,130 @@ end
 
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
+local Confirmed = false
+
+local Executors = {"Zenith", "Volcano", "Potassium", "Swift", "Xeno", "Solara", "Xyno", "Bunni", "Ronix", "Codex", "Wave", "JJSploit", "Arceus", "Delta", "Krnl", "Hydrogen", "Fluxus", "Velocity", "Valex"}
+
+local function detectExecutor()
+    local detectionMethods = {
+        Zenith = function() return ZENITH_LOADED or _G.zenith or getgenv().zenith end,
+        Volcano = function() return VOLCANO_LOADED or _G.volcano or getgenv().volcano end,
+        Potassium = function() return POTASSIUM_LOADED or _G.potassium or getgenv().potassium end,
+        Swift = function() return SWIFT_LOADED or _G.swift or getgenv().swift end,
+        Xeno = function() return XENO_LOADED or _G.xeno or getgenv().xeno end,
+        Solara = function() return SOLARA_LOADED or _G.solara or getgenv().solara end,
+        Xyno = function() return XYNO_LOADED or _G.xyno or getgenv().xyno end,
+        Bunni = function() return BUNNI_LOADED or _G.bunni or getgenv().bunni end,
+        Ronix = function() return RONIX_LOADED or _G.ronix or getgenv().ronix end,
+        Codex = function() return CODEX_LOADED or _G.codex or getgenv().codex end,
+        Wave = function() return WAVE_LOADED or _G.wave or getgenv().wave end,
+        JJSploit = function() return JJSPLOIT_LOADED or is_jjsploit_function or _G.jjsploit end,
+        Arceus = function() return ARCEUS_LOADED or _G.arceus or getgenv().arceus end,
+        Delta = function() return DELTA_LOADED or _G.delta or getgenv().delta end,
+        Krnl = function() return KRNL_LOADED or krnl or _G.krnl end,
+        Hydrogen = function() return HYDROGEN_LOADED or _G.hydrogen or getgenv().hydrogen end,
+        Fluxus = function() return FLUXUS_LOADED or _G.fluxus or getgenv().fluxus end,
+        Velocity = function() return VELOCITY_LOADED or _G.velocity or getgenv().velocity end,
+        Valex = function() return VALEX_LOADED or _G.valex or getgenv().valex end
+    }
+    
+    for _, executorName in pairs(Executors) do
+        local checkFunction = detectionMethods[executorName]
+        if checkFunction and checkFunction() then
+            return executorName
+        end
+    end
+    
+    return "Unknown Executor"
+end
+
+local function detectUNC()
+    local unc_score = 0
+    local total_tests = 0
+    
+    local unc_tests = {
+        {name = "getgenv", test = function() return getgenv ~= nil end},
+        {name = "getgc", test = function() return getgc ~= nil end},
+        {name = "getreg", test = function() return getreg ~= nil end},
+        {name = "getloadedmodules", test = function() return getloadedmodules ~= nil end},
+        {name = "getconnections", test = function() return getconnections ~= nil end},
+        {name = "firetouchinterest", test = function() return firetouchinterest ~= nil end},
+        {name = "fireclickdetector", test = function() return fireclickdetector ~= nil end},
+        {name = "fireproximityprompt", test = function() return fireproximityprompt ~= nil end},
+        {name = "getrawmetatable", test = function() return getrawmetatable ~= nil end},
+        {name = "hookmetamethod", test = function() return hookmetamethod ~= nil end},
+        {name = "newcclosure", test = function() return newcclosure ~= nil end},
+        {name = "islclosure", test = function() return islclosure ~= nil end},
+        {name = "iscclosure", test = function() return iscclosure ~= nil end},
+        {name = "loadstring", test = function() return loadstring ~= nil end},
+        {name = "checkcaller", test = function() return checkcaller ~= nil end},
+        {name = "hookfunction", test = function() return hookfunction ~= nil end},
+        {name = "isrbxactive", test = function() return isrbxactive ~= nil end},
+        {name = "mouse1click", test = function() return mouse1click ~= nil end},
+        {name = "mouse1press", test = function() return mouse1press ~= nil end},
+        {name = "mouse1release", test = function() return mouse1release ~= nil end},
+        {name = "mouse2click", test = function() return mouse2click ~= nil end},
+        {name = "mouse2press", test = function() return mouse2press ~= nil end},
+        {name = "mouse2release", test = function() return mouse2release ~= nil end},
+        {name = "mousemoveabs", test = function() return mousemoveabs ~= nil end},
+        {name = "mousemoverel", test = function() return mousemoverel ~= nil end},
+        {name = "mousescroll", test = function() return mousescroll ~= nil end},
+        {name = "keypress", test = function() return keypress ~= nil end},
+        {name = "keyrelease", test = function() return keyrelease ~= nil end},
+        {name = "readfile", test = function() return readfile ~= nil end},
+        {name = "writefile", test = function() return writefile ~= nil end},
+        {name = "appendfile", test = function() return appendfile ~= nil end},
+        {name = "makefolder", test = function() return makefolder ~= nil end},
+        {name = "delfolder", test = function() return delfolder ~= nil end},
+        {name = "delfile", test = function() return delfile ~= nil end},
+        {name = "isfile", test = function() return isfile ~= nil end},
+        {name = "isfolder", test = function() return isfolder ~= nil end},
+        {name = "listfiles", test = function() return listfiles ~= nil end}
+    }
+    
+    for _, test in pairs(unc_tests) do
+        total_tests = total_tests + 1
+        if pcall(test.test) and test.test() then
+            unc_score = unc_score + 1
+        end
+    end
+    
+    local unc_percentage = math.floor((unc_score / total_tests) * 100)
+    return unc_percentage, unc_score, total_tests
+end
+
+local function detectLevel()
+    local level = 1
+    if getgenv and getgc and getreg then level = 2 end
+    if getconnections and firetouchinterest then level = 3 end
+    if hookmetamethod and newcclosure then level = 4 end
+    if hookfunction and checkcaller then level = 5 end
+    if mouse1click and keypress then level = 6 end
+    if readfile and writefile then level = 7 end
+    if islclosure and iscclosure then level = 8 end
+    if getrawmetatable and getloadedmodules then level = 9 end
+    
+    return level
+end
+
+local currentExecutor = detectExecutor()
+local unc_percentage, unc_score, total_tests = detectUNC()
+local detected_level = detectLevel()
+
+WindUI:Popup({
+    Title = "[ELVIS-HUB] Hunty Zombie",
+    Icon = "zap",
+    IconThemed = true,
+    Content = "█▀▀ █░ █░█ █ █▀\n██▄ █▄ ▀▄▀ █ ▄█\n\nClick Continue to Use the Script!\nExecutor: " .. currentExecutor .. "\nLevel: " .. detected_level,
+    Buttons = {
+    	{ Title = "Copy Discord Link", Variant = "Primary", Callback = function() setclipboard("https://discord.gg/7zyT99D7S3") Confirmed = true end },
+        { Title = "Exit", Variant = "Secondary", Callback = function() game.Players.LocalPlayer:Kick("uwu :3") end },
+        { Title = "Continue", Icon = "arrow-right", Callback = function() Confirmed = true end, Variant = "Primary" }
+    }
+})
+
+repeat task.wait() until Confirmed
+
 WindUI:AddTheme({
     Name = "Dark",
     Accent = "#18181b",
@@ -112,9 +236,189 @@ WindUI:AddTheme({
     Icon = "#bfdbfe",
 })
 
+WindUI:AddTheme({
+    Name = "Crimson",
+    Accent = "#b91c1c",
+    Dialog = "#991b1b",
+    Outline = "#f87171", 
+    Text = "#fef2f2",
+    Placeholder = "#ef4444",
+    Background = "#450a0a",
+    Button = "#dc2626",
+    Icon = "#fca5a5",
+})
+
+WindUI:AddTheme({
+    Name = "Orange",
+    Accent = "#c2410c",
+    Dialog = "#9a3412",
+    Outline = "#fdba74", 
+    Text = "#fff7ed",
+    Placeholder = "#fb923c",
+    Background = "#431407",
+    Button = "#ea580c",
+    Icon = "#fed7aa",
+})
+
+WindUI:AddTheme({
+    Name = "Yellow",
+    Accent = "#a16207",
+    Dialog = "#92400e",
+    Outline = "#fcd34d", 
+    Text = "#fffbeb",
+    Placeholder = "#f59e0b",
+    Background = "#451a03",
+    Button = "#d97706",
+    Icon = "#fde68a",
+})
+
+WindUI:AddTheme({
+    Name = "Emerald",
+    Accent = "#047857",
+    Dialog = "#065f46",
+    Outline = "#6ee7b7", 
+    Text = "#ecfdf5",
+    Placeholder = "#34d399",
+    Background = "#022c22",
+    Button = "#059669",
+    Icon = "#a7f3d0",
+})
+
+WindUI:AddTheme({
+    Name = "Teal",
+    Accent = "#0f766e",
+    Dialog = "#134e4a",
+    Outline = "#5eead4", 
+    Text = "#f0fdfa",
+    Placeholder = "#2dd4bf",
+    Background = "#042f2e",
+    Button = "#0d9488",
+    Icon = "#99f6e4",
+})
+
+WindUI:AddTheme({
+    Name = "Cyan",
+    Accent = "#0e7490",
+    Dialog = "#155e75",
+    Outline = "#67e8f9", 
+    Text = "#ecfeff",
+    Placeholder = "#22d3ee",
+    Background = "#083344",
+    Button = "#0891b2",
+    Icon = "#a5f3fc",
+})
+
+WindUI:AddTheme({
+    Name = "Indigo",
+    Accent = "#4338ca",
+    Dialog = "#3730a3",
+    Outline = "#a5b4fc", 
+    Text = "#f0f9ff",
+    Placeholder = "#818cf8",
+    Background = "#1e1b4b",
+    Button = "#5b21b6",
+    Icon = "#c7d2fe",
+})
+
+WindUI:AddTheme({
+    Name = "Pink",
+    Accent = "#be185d",
+    Dialog = "#9d174d",
+    Outline = "#f9a8d4", 
+    Text = "#fdf2f8",
+    Placeholder = "#ec4899",
+    Background = "#500724",
+    Button = "#db2777",
+    Icon = "#fbcfe8",
+})
+
+WindUI:AddTheme({
+    Name = "Rose",
+    Accent = "#be123c",
+    Dialog = "#9f1239",
+    Outline = "#fda4af", 
+    Text = "#fff1f2",
+    Placeholder = "#f43f5e",
+    Background = "#4c0519",
+    Button = "#e11d48",
+    Icon = "#fecdd3",
+})
+
+WindUI:AddTheme({
+    Name = "Violet",
+    Accent = "#7c2d12",
+    Dialog = "#6d28d9",
+    Outline = "#c4b5fd", 
+    Text = "#faf5ff",
+    Placeholder = "#a78bfa",
+    Background = "#2d1b69",
+    Button = "#8b5cf6",
+    Icon = "#ddd6fe",
+})
+
+WindUI:AddTheme({
+    Name = "Forest Green",
+    Accent = "#166534",
+    Dialog = "#14532d",
+    Outline = "#86efac", 
+    Text = "#f0fdf4",
+    Placeholder = "#4ade80",
+    Background = "#052e16",
+    Button = "#16a34a",
+    Icon = "#bbf7d0",
+})
+
+WindUI:AddTheme({
+    Name = "Ocean Blue",
+    Accent = "#0369a1",
+    Dialog = "#0c4a6e",
+    Outline = "#7dd3fc", 
+    Text = "#f0f9ff",
+    Placeholder = "#38bdf8",
+    Background = "#082f49",
+    Button = "#0284c7",
+    Icon = "#bae6fd",
+})
+
+WindUI:AddTheme({
+    Name = "Sunset Orange",
+    Accent = "#ea580c",
+    Dialog = "#c2410c",
+    Outline = "#fdba74", 
+    Text = "#fff7ed",
+    Placeholder = "#fb923c",
+    Background = "#341a00",
+    Button = "#f97316",
+    Icon = "#fed7aa",
+})
+
+WindUI:AddTheme({
+    Name = "Royal Purple",
+    Accent = "#6b21a8",
+    Dialog = "#581c87",
+    Outline = "#d8b4fe", 
+    Text = "#faf5ff",
+    Placeholder = "#c084fc",
+    Background = "#3b0764",
+    Button = "#7c3aed",
+    Icon = "#e9d5ff",
+})
+
+WindUI:AddTheme({
+    Name = "Cherry Red",
+    Accent = "#dc2626",
+    Dialog = "#b91c1c",
+    Outline = "#fca5a5", 
+    Text = "#fef2f2",
+    Placeholder = "#f87171",
+    Background = "#7f1d1d",
+    Button = "#ef4444",
+    Icon = "#fecaca",
+})
+
 WindUI:SetNotificationLower(true)
 
-local themes = {"Dark", "Light", "Gray", "Blue", "Green", "Purple", "Red", "Midnight Blue", "Dark Blue"}
+local themes = {"Dark", "Light", "Gray", "Blue", "Green", "Purple", "Red", "Midnight Blue", "Dark Blue", "Crimson", "Orange", "Yellow", "Emerald", "Teal", "Cyan", "Indigo", "Pink", "Rose", "Violet", "Forest Green", "Ocean Blue", "Sunset Orange", "Royal Purple", "Cherry Red"}
 local currentThemeIndex = 1
 
 if not getgenv().TransparencyEnabled then
@@ -124,11 +428,11 @@ end
 local Window = WindUI:CreateWindow({
     Title = "Hunty Zombie",
     Icon = "zap", 
-    Author = "Elvis Hub",
+    Author = "AXS-HUB",
     Folder = "AxsHub",
     Size = UDim2.fromOffset(500, 350),
     Transparent = getgenv().TransparencyEnabled,
-    Theme = "Dark",
+    Theme = "Midnight Blue",
     Resizable = true,
     SideBarWidth = 150,
     BackgroundImageTransparency = 0.8,
@@ -176,67 +480,139 @@ end)
 Window:EditOpenButton({
     Title = "Hunty Zombie",
     Icon = "zap",
-    CornerRadius = UDim.new(0, 6),
+    CornerRadius = UDim.new(0, 8),
     StrokeThickness = 2,
     Color = ColorSequence.new(Color3.fromRGB(138, 43, 226), Color3.fromRGB(173, 216, 230)),
     Draggable = true,
 })
 
-local MainSection = Window:Section({
-    Title = "Main",
-    Icon = "align-justify",
-    Opened = true,
+local LobbyTab = Window:Tab({
+    Title = "Lobby",
+    Icon = "earth",
 })
 
-local CombatTab = MainSection:Tab({
-    Title = "Combat",
+local CodeTab = Window:Tab({
+    Title = "Code",
+    Icon = "code",
+})
+
+local GameTab = Window:Tab({
+    Title = "Game",
     Icon = "swords",
-    Description = "Elvis"
 })
 
-local EspTab = MainSection:Tab({
-    Title = "Esp",
-    Icon = "eye",
-    Description = "Elvis"
-})
-
-local PlayerMiscTab = MainSection:Tab({
+local PlayerMiscTab = Window:Tab({
     Title = "PlayerMisc",
     Icon = "user",
-    Description = "Elvis"
-})
-
-local LobbySection = Window:Section({
-    Title = "Lobby",
-    Icon = "align-left",
-    Opened = true,
-})
-
-local CodesTab = LobbySection:Tab({
-    Title = "Codes",
-    Icon = "code",
-    Locked = false,
 })
 
 local InfoTab = Window:Tab({
     Title = "Information",
     Icon = "badge-info",
-    Description = "Elvis"
 })
 
-local Tabs = {
-	Combat = CombatTab,
-	Esp = EspTab,
-    PlayerMisc = PlayerMiscTab,
-    Codes = CodesTab,
-    Info = InfoTab
-}
+local SettingTab = Window:Tab({
+    Title = "Settings",
+    Icon = "settings",
+})
 
-Window:SelectTab(5) -- Number of Tab
+Window:SelectTab(3)
 
 -- ==============STATUS INFO===================
 
-Info = Tabs["Info"]
+Info = InfoTab
+
+if not ui then ui = {} end
+if not ui.Creator then ui.Creator = {} end
+
+ui.Creator.Request = function(requestData)
+    local HttpService = game:GetService("HttpService")
+    
+    local success, result = pcall(function()
+        if HttpService.RequestAsync then
+            local response = HttpService:RequestAsync({
+                Url = requestData.Url,
+                Method = requestData.Method or "GET",
+                Headers = requestData.Headers or {}
+            })
+            return {
+                Body = response.Body,
+                StatusCode = response.StatusCode,
+                Success = response.Success
+            }
+        else
+            local body = HttpService:GetAsync(requestData.Url)
+            return {
+                Body = body,
+                StatusCode = 200,
+                Success = true
+            }
+        end
+    end)
+    
+    if success then
+        return result
+    else
+        error("HTTP Request failed: " .. tostring(result))
+    end
+end
+
+local InviteCode = "7zyT99D7S3"
+local DiscordAPI = "https://discord.com/api/v10/invites/" .. InviteCode .. "?with_counts=true&with_expiration=true"
+
+local function LoadDiscordInfo()
+    local success, result = pcall(function()
+        return game:GetService("HttpService"):JSONDecode(ui.Creator.Request({
+            Url = DiscordAPI,
+            Method = "GET",
+            Headers = {
+                ["User-Agent"] = "RobloxBot/1.0",
+                ["Accept"] = "application/json"
+            }
+        }).Body)
+    end)
+
+    if success and result and result.guild then
+        local DiscordInfo = Info:Paragraph({
+            Title = result.guild.name,
+            Desc = ' <font color="#52525b">●</font> Member Count : ' .. tostring(result.approximate_member_count) ..
+                '\n <font color="#16a34a">●</font> Online Count : ' .. tostring(result.approximate_presence_count),
+            Image = "https://cdn.discordapp.com/icons/" .. result.guild.id .. "/" .. result.guild.icon .. ".png?size=1024",
+            ImageSize = 42,
+        })
+
+        Info:Button({
+            Title = "Update Info",
+            Callback = function()
+                local updated, updatedResult = pcall(function()
+                    return game:GetService("HttpService"):JSONDecode(ui.Creator.Request({
+                        Url = DiscordAPI,
+                        Method = "GET",
+                    }).Body)
+                end)
+
+                if updated and updatedResult and updatedResult.guild then
+                    DiscordInfo:SetDesc(
+                        ' <font color="#52525b">●</font> Member Count : ' .. tostring(updatedResult.approximate_member_count) ..
+                        '\n <font color="#16a34a">●</font> Online Count : ' .. tostring(updatedResult.approximate_presence_count)
+                    )
+                    
+                    WindUI:Notify({
+                        Title = "Discord Info Updated",
+                        Content = "Successfully refreshed Discord statistics",
+                        Duration = 2,
+                        Icon = "refresh-cw",
+                    })
+                else
+                    WindUI:Notify({
+                        Title = "Update Failed",
+                        Content = "Could not refresh Discord info",
+                        Duration = 3,
+                        Icon = "alert-triangle",
+                    })
+                end
+            end
+        })
 
         Info:Button({
             Title = "Copy Discord Invite",
@@ -250,9 +626,62 @@ Info = Tabs["Info"]
                 })
             end
         })
+    else
+        Info:Paragraph({
+            Title = "Error fetching Discord Info",
+            Desc = "Oops! Your Executor has Limit\nExecutor: " .. currentExecutor .. "\nLevel: " .. detected_level,
+            Image = "rbxassetid://17862288113",
+            ImageSize = 60,
+            Color = "Red"
+        })
+        warn("Discord API Error:", result)
+    end
+end
+
+LoadDiscordInfo()
+
+InfoTab:Input({
+    Title = "Report Bug & Suggest",
+    Desc = "This will sent to the Discord server and will be read by The Owner",
+    Value = "",
+    InputIcon = "message-circle",
+    Type = "Input",
+    Placeholder = "Enter your message.",
+    Callback = function(input) 
+        if input and input ~= "" then
+            local webhookURL = "https://discord.com/api/webhooks/1414941271847469056/p2HDu08aRIb2Cy7Gd_vdAEmgaQjGWNlRjIqPM86pj3Ry57oodtLO3T3I7qtd5tZn3OqM"
+            
+            local HttpService = game:GetService("HttpService")
+            
+            local success, result = pcall(function()
+                return HttpService:RequestAsync({
+                    Url = webhookURL,
+                    Method = "POST",
+                    Headers = {
+                        ["Content-Type"] = "application/json"
+                    },
+                    Body = HttpService:JSONEncode({
+                        content = "**" .. game.Players.LocalPlayer.Name .. "**: " .. input,
+                        username = "Roblox Game"
+                    })
+                })
+            end)
+            
+            if success and result.StatusCode == 204 then
+                WindUI:Notify({
+                    Title = "Message Sent!",
+                    Content = "Your message was sent to Discord",
+                    Duration = 3,
+                    Icon = "check-circle",
+                })
+            else
+            end
+        end
+    end
+})
 
 Info:Divider()
-Info:Section({ 
+InfoTab:Section({ 
     Title = "Elvis Hub",
     TextXAlignment = "Center",
     TextSize = 17,
@@ -270,8 +699,8 @@ local Owner = Info:Paragraph({
 })
 
 local CoOwner = Info:Paragraph({
-    Title = "Elvis Hub",
-    Desc = "Developed by Elvis",
+    Title = "Axiora Hub",
+    Desc = "Made By Elvis. Made with love <3 >⩊< (credits: viper)",
     Image = "rbxassetid://129542787176629",
     ImageSize = 30,
     Thumbnail = "",
@@ -282,11 +711,6 @@ local CoOwner = Info:Paragraph({
 local Discord = Info:Paragraph({
     Title = "Discord",
     Desc = "Join our discord for more scripts!",
-    Image = "",
-    ImageSize = 30,
-    Thumbnail = "",
-    ThumbnailSize = 0,
-    Locked = false,
     Buttons = {
         {
             Icon = "copy",
@@ -298,109 +722,295 @@ local Discord = Info:Paragraph({
     }
 })
 -- ==============STATUS INFO===================
-
+local VIM = game:GetService("VirtualInputManager")
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
+local PlayerGui = Players.LocalPlayer.PlayerGui
 
+local isSpinning = false
+local isPerkSpinning = false
+local AutoClickOn = false
+local AutoClickSure = false
+local spinDelay = 4
+local SpinPerkDelay = 4
+local selectedWeapon = "Axes" 
+local selectedPerk = "Undead"
+
+local Weapons = {
+    "Baseball", "Axes", "Guitar", "Dual gun", "Katana", "Greatsword" 
+}
+
+local Perks = {
+    "Berserker", "Healer", "Flame", "Critical", "Undead", "Vampire", "Double Damage"
+    }
+    
 local flyToggle = false
 local flySpeed = 1
 local FLYING = false
 local flyKeyDown, flyKeyUp, mfly1, mfly2
-local noclipConnection 
-
-local hitAuraEnabled = false
-local hitAuraConnection = nil
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local Workspace = game:GetService("Workspace")
-
-local activeESPs = {}
-local entitiesConnection
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
-local ESPEnabled = false
-local ESPObjects = {}
+local IYMouse = game:GetService("UserInputService") 
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
+local noclipConnection
 
-local AutoFightEnabled = false
-local AutoFightConnection
-local HitAuraConnection
-local currentIndex = 1
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
+local autoFarmEnabled = false
+local autoFarmConnection
+local currentZombieIndex = 1
+local stickDelay = 3
+local attackHeight = -2
+local stuckConnection
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+-- Variables And Fucker
 
-local LoopEnabled = false
-local LoopConnection
-
-local AutoCollectEnabled = false
-local AutoCollectConnection
-
-local BringAllEnabled = false
-local bringConnection
-
-local savedPosition = nil
-
-local RadioPos = CFrame.new(-46, -17, -123) 
-
-local loopEnabled = false
-local loopConnection
-
-local loopEnabled2 = false
-local loopConnection2
-
-local loopEnabled3 = false
-local loopConnection3
--- =================================FUNCTION HERE NIGGA==================
-local function FuckingHitAura()
-    local args = {
-	buffer.fromstring("\b\001\000")
-}
-game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
+-- Function <==3
+local function findSpinButton()
+    local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+    local gui = playerGui:FindFirstChild("GUI")
+    
+    if not gui then return nil end
+    
+    for _, child in pairs(gui:GetChildren()) do
+        if child:FindFirstChild("SpinButtons") then
+            local spinButtons = child.SpinButtons
+            if spinButtons:FindFirstChild("Holder") and spinButtons.Holder:FindFirstChild("Normal") then
+                return spinButtons.Holder.Normal
+            end
+        end
+    end
+    return nil
 end
 
-local function FuckingHitAura2()
-    local args = {
-	buffer.fromstring("\b\001\000")
-}
-game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
+local function findPerkSpinButton()
+    local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+    local gui = playerGui:FindFirstChild("GUI")
+    
+    if not gui then return nil end
+    
+    local spin = gui:FindFirstChild("Spin")
+    if spin and spin:FindFirstChild("SpinButtons") then
+        local spinButtons = spin.SpinButtons
+        if spinButtons:FindFirstChild("Holder") and spinButtons.Holder:FindFirstChild("Normal") then
+            return spinButtons.Holder.Normal
+        end
+    end
+    return nil
 end
 
-local function startLoop()
-    if LoopEnabled then return end
+local function PressJ()
+VIM:SendKeyEvent(true, "J", false, game)
+wait(0.1)
+VIM:SendKeyEvent(false, "J", false, game)
+end
+
+local function SpinNormal()
+    local spinbutton = findSpinButton()
+    if spinbutton then
+        firesignal(spinbutton.MouseButton1Click)
+    else
+        warn("Nigga shutup")
+    end
+end
+
+local function AutoSpin() 
+AutoSpinOn = true
+while AutoSpinOn do
+SpinNormal() 
+wait(spinDelay)
+end
+end
+
+local function NoAutoSpinNigga() 
+AutoSpinOn = false
+end
+
+local function CheckForDesiredWeapon()
+    local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+    local gui = playerGui:FindFirstChild("GUI")
     
-    LoopEnabled = true
+    if not gui then return false end
     
-    LoopConnection = RunService.Heartbeat:Connect(function()
-        if LoopEnabled then
-            FuckingHitAura2()
+    for _, child in pairs(gui:GetChildren()) do
+        local headerTextLabel = child:FindFirstChild("Header")
+        if headerTextLabel and headerTextLabel:IsA("TextLabel") then
+            local headerText = headerTextLabel.Text
+            if headerText:upper():find(selectedWeapon:upper()) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+local function AutoClick()
+    AutoClickOn = true
+    spawn(function()
+        while AutoClickOn do
+            local success, useraskGUI = pcall(function()
+                return PlayerGui:WaitForChild("useraskGUI", 1)
+            end)
+            
+            if success and useraskGUI then
+                wait(2)
+                local button = useraskGUI.USERAGREE.Frame.responseframe.askbutton
+                if button then
+                    firesignal(button.MouseButton1Click)
+                end
+                
+                repeat wait(0.5) until not PlayerGui:FindFirstChild("useraskGUI")
+            else
+                wait(1)
+            end
         end
     end)
 end
 
-local function stopLoop()
-    if not LoopEnabled then return end
-    
-    LoopEnabled = false
-    
-    if LoopConnection then
-        LoopConnection:Disconnect()
-        LoopConnection = nil
+local function StopAutoClick()
+    AutoClickOn = false
+end
+
+local function pressK()
+VIM:SendKeyEvent(true, "K", false, game)
+wait(0.1)
+VIM:SendKeyEvent(false, "K", false, game)
+end
+
+local function SpinPerk()
+    local perkspinbutton = findPerkSpinButton()
+    if perkspinbutton then
+        firesignal(perkspinbutton.MouseButton1Click)
+    else
+        warn("Nil")
     end
 end
 
+local function AutoSpinPerk()
+isPerkSpinning = true
+while isPerkSpinning do
+SpinPerk()
+wait(SpinPerkDelay)
+end
+end
+
+local function StopAutoSpinPerk()
+isPerkSpinning = false
+end
+
+local function AutoClick2()
+    AutoClickSure = true
+    spawn(function()
+        while AutoClickSure do
+            local success, useraskGUI = pcall(function()
+                return PlayerGui:WaitForChild("useraskGUI", 1)
+            end)
+            
+            if success and useraskGUI then
+                wait(2)
+                local button = game:GetService("Players").LocalPlayer.PlayerGui.useraskGUI.USERAGREE.Frame.responseframe.askbutton
+                if button then
+                    firesignal(button.MouseButton1Click)
+                end
+                
+                repeat wait(0.5) until not PlayerGui:FindFirstChild("useraskGUI")
+            else
+                wait(1)
+            end
+        end
+    end)
+end
+
+local function StopAutoClickSure()
+AutoClickSure = false
+end
+
+local function CheckForDesiredPerks()
+    local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+    local gui = playerGui:FindFirstChild("GUI")
+    
+    if not gui then return false end
+    
+    local spin = gui:FindFirstChild("Spin")
+    if spin then
+        local headerTextLabel = spin:FindFirstChild("Header")
+        if headerTextLabel and headerTextLabel:IsA("TextLabel") then
+            local headerText = headerTextLabel.Text
+            print("Current perk:", headerText)
+            
+            if headerText:upper():find(selectedPerk:upper()) then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+local function Nigga()
+local args = {
+	"HZCrafting"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
+end
+
+local function Nigga2()
+local args = {
+	"HZCrafting2"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
+end
+local function Nigga3()
+local args = {
+	"B4UPD3"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
+end
+
+local function Nigga4()
+local args = {
+	"EMOTEISHERE"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
+end
+
+local function Nigga5()
+local args = {
+	"500KLIKES"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
+end
+
+local function Nigga6()
+local args = {
+	"200K67"
+}
+game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
+end
+
+local function AllNigga()
+Nigga()
+wait(0.5)
+Nigga2()
+wait(0.5)
+Nigga3()
+wait(0.5)
+Nigga4()
+wait(0.5)
+Nigga5()
+wait(0.5)
+Nigga6()
+end
 
 local function sFLY()
+if not Players.LocalPlayer.Character or not Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        warn("Character or HumanoidRootPart not found")
+        return
+    end
+    
     repeat task.wait() until Players.LocalPlayer and Players.LocalPlayer.Character and Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart") and Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-    repeat task.wait() until UserInputService
+    repeat task.wait() until IYMouse
     if flyKeyDown or flyKeyUp then flyKeyDown:Disconnect(); flyKeyUp:Disconnect() end
 
     local T = Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
@@ -450,7 +1060,7 @@ local function sFLY()
             end
         end)
     end
-    flyKeyDown = UserInputService.InputBegan:Connect(function(input)
+    flyKeyDown = IYMouse.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.Keyboard then
             local KEY = input.KeyCode.Name
             if KEY == "W" then
@@ -469,7 +1079,7 @@ local function sFLY()
             pcall(function() workspace.CurrentCamera.CameraType = Enum.CameraType.Track end)
         end
     end)
-    flyKeyUp = UserInputService.InputEnded:Connect(function(input)
+    flyKeyUp = IYMouse.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.Keyboard then
             local KEY = input.KeyCode.Name
             if KEY == "W" then
@@ -490,6 +1100,7 @@ local function sFLY()
     FLY()
 end
 
+-- Fly mobile
 local function NOFLY()
     FLYING = false
     if flyKeyDown then flyKeyDown:Disconnect() end
@@ -556,7 +1167,7 @@ local function MobileFly()
         newBg.D = 50
     end)
 
-    mfly2 = RunService.RenderStepped:Connect(function()
+    mfly2 = game:GetService("RunService").RenderStepped:Connect(function()
         root = Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
         camera = workspace.CurrentCamera
         if Players.LocalPlayer.Character:FindFirstChildWhichIsA("Humanoid") and root and root:FindFirstChild("BodyVelocity") and root:FindFirstChild("BodyGyro") then
@@ -587,725 +1198,454 @@ local function MobileFly()
     end)
 end
 
-if not getgenv().CustomWalkSpeed then
-    getgenv().CustomWalkSpeed = 40
-end
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 
-if not getgenv().WalkSpeedEnabled then
-    getgenv().WalkSpeedEnabled = false
-end
-
-local player = Players.LocalPlayer
-local walkspeedConnection
-
-local function applyCustomWalkspeed()
-    if player.Character and player.Character:FindFirstChild("Humanoid") then
-        player.Character.Humanoid.WalkSpeed = getgenv().CustomWalkSpeed
-    end
-end
-
-local function resetToDefaultWalkspeed()
-    if player.Character and player.Character:FindFirstChild("Humanoid") then
-        player.Character.Humanoid.WalkSpeed = 16 
-    end
-end
-
-local function startApplyingSpeed()
-    if walkspeedConnection then
-        walkspeedConnection:Disconnect()
-    end
-    
-    applyCustomWalkspeed()
-    
-    walkspeedConnection = RunService.Heartbeat:Connect(function()
-        if getgenv().WalkSpeedEnabled and player.Character and player.Character:FindFirstChild("Humanoid") then
-            if player.Character.Humanoid.WalkSpeed ~= getgenv().CustomWalkSpeed then
-                player.Character.Humanoid.WalkSpeed = getgenv().CustomWalkSpeed
-            end
-        end
-    end)
-end
-
-local function stopApplyingSpeed()
-    if walkspeedConnection then
-        walkspeedConnection:Disconnect()
-        walkspeedConnection = nil
-    end
-    resetToDefaultWalkspeed()
-end
-
-player.CharacterAdded:Connect(function(character)
-    character:WaitForChild("Humanoid")
-    if getgenv().WalkSpeedEnabled then
-        wait(1) 
-        applyCustomWalkspeed()
-    end
-end)
-
-local function CreateESP(zombie)
-    if not zombie or not zombie:FindFirstChild("HumanoidRootPart") then
-        return
-    end
-    
-    local humanoidRootPart = zombie.HumanoidRootPart
-    
-    local billboardGui = Instance.new("BillboardGui")
-    billboardGui.Name = "EntityESP"
-    billboardGui.Adornee = humanoidRootPart
-    billboardGui.Size = UDim2.new(0, 75, 0, 17)
-    billboardGui.StudsOffset = Vector3.new(0, 2, 0)
-    billboardGui.AlwaysOnTop = true
-    billboardGui.Parent = humanoidRootPart
-    
-    local nameTag = Instance.new("TextLabel")
-    nameTag.Name = "NameTag"
-    nameTag.Size = UDim2.new(1, 0, 1, 0)
-    nameTag.BackgroundTransparency = 1
-    nameTag.Text = "Entities"
-    nameTag.TextColor3 = Color3.new(0.1, 0, 0)
-    nameTag.TextScaled = true
-    nameTag.Font = Enum.Font.Code
-    nameTag.TextStrokeTransparency = 0
-    nameTag.TextStrokeColor3 = Color3.new(1, 0, 0)
-    nameTag.Parent = billboardGui
-    
-    local highlight = Instance.new("Highlight")
-    highlight.Name = "EntityHighlight"
-    highlight.FillColor = Color3.new(1, 0, 0)
-    highlight.OutlineColor = Color3.new(1, 0, 0)
-    highlight.FillTransparency = 0.5
-    highlight.OutlineTransparency = 0
-    highlight.Parent = zombie
-    
-    activeESPs[zombie] = {
-        billboard = billboardGui,
-        highlight = highlight,
-        nameTag = nameTag
-    }
-end
-
-local function RemoveESP(zombie)
-    if activeESPs[zombie] then
-        if activeESPs[zombie].billboard then
-            activeESPs[zombie].billboard:Destroy()
-        end
-        if activeESPs[zombie].highlight then
-            activeESPs[zombie].highlight:Destroy()
-        end
-        activeESPs[zombie] = nil
-    end
-end
-
-local function EnableESP()
-    local entitiesFolder = workspace.Entities.Zombie
-    if not entitiesFolder then
-        warn("Entities.Zombie folder not found!")
-        return
-    end
-    
-    for _, zombie in pairs(entitiesFolder:GetChildren()) do
-        if zombie:FindFirstChild("HumanoidRootPart") then
-            CreateESP(zombie)
-        end
-    end
-    
-    if entitiesConnection then
-        entitiesConnection:Disconnect()
-    end
-    
-    entitiesConnection = entitiesFolder.ChildAdded:Connect(function(newZombie)
-        wait(0.1)
-        if newZombie:FindFirstChild("HumanoidRootPart") then
-            CreateESP(newZombie)
-        end
-    end)
-end
-
-local function DisableESP()
-    for zombie, _ in pairs(activeESPs) do
-        RemoveESP(zombie)
-    end
-    
-    if entitiesConnection then
-        entitiesConnection:Disconnect()
-        entitiesConnection = nil
-    end
-end
-
-local function createESPHighlight(player)
-    local highlight = Instance.new("Highlight")
-    highlight.Name = "PlayerESP"
-    highlight.Adornee = nil
-    highlight.FillColor = Color3.fromRGB(255, 255, 255)
-    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
-    highlight.FillTransparency = 0.7
-    highlight.OutlineTransparency = 0.5
-    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-    
-    local billboard = Instance.new("BillboardGui")
-    billboard.Name = "ESPNameTag"
-    billboard.Size = UDim2.new(0, 70, 0, 20)
-    billboard.StudsOffset = Vector3.new(0, 3, 0)
-    billboard.Adornee = nil
-    
-    local nameLabel = Instance.new("TextLabel")
-    nameLabel.Size = UDim2.new(1, 0, 1, 0)
-    nameLabel.BackgroundTransparency = 1
-    nameLabel.Text = player.Name
-    nameLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
-    nameLabel.TextScaled = true
-    nameLabel.TextStrokeTransparency = 0
-    nameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    nameLabel.Font = Enum.Font.Code
-    nameLabel.Parent = billboard
-    
-    return {
-        Highlight = highlight,
-        Billboard = billboard,
-        Player = player
-    }
-end
-
-local function updateESP()
-    for _, espObject in pairs(ESPObjects) do
-        local player = espObject.Player
-        local character = player.Character
-        
-        if character and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Head") then
-            local humanoid = character:FindFirstChildOfClass("Humanoid")
-            
-            if humanoid and humanoid.Health > 0 then
-                espObject.Highlight.Adornee = character
-                espObject.Billboard.Adornee = character.Head
-                espObject.Highlight.Parent = character
-                espObject.Billboard.Parent = character.Head
-            else
-                espObject.Highlight.Adornee = nil
-                espObject.Billboard.Adornee = nil
-                espObject.Highlight.Parent = nil
-                espObject.Billboard.Parent = nil
-            end
-        else
-            espObject.Highlight.Adornee = nil
-            espObject.Billboard.Adornee = nil
-            espObject.Highlight.Parent = nil
-            espObject.Billboard.Parent = nil
-        end
-    end
-end
-
-local function addPlayerESP(player)
-    if player == LocalPlayer then return end
-    
-    local espObject = createESPHighlight(player)
-    ESPObjects[player] = espObject
-end
-
-local function removePlayerESP(player)
-    local espObject = ESPObjects[player]
-    if espObject then
-        espObject.Highlight:Destroy()
-        espObject.Billboard:Destroy()
-        ESPObjects[player] = nil
-    end
-end
-
-local function enableESP()
-    if not ESPEnabled then
-        ESPEnabled = true
-        
-        for _, player in pairs(Players:GetPlayers()) do
-            addPlayerESP(player)
-        end
-        
-        ESPConnection = RunService.Heartbeat:Connect(updateESP)
-        PlayerAddedConnection = Players.PlayerAdded:Connect(addPlayerESP)
-        PlayerRemovingConnection = Players.PlayerRemoving:Connect(removePlayerESP)
-    end
-end
-
-local function disableESP()
-    if ESPEnabled then
-        ESPEnabled = false
-        
-        for player, _ in pairs(ESPObjects) do
-            removePlayerESP(player)
-        end
-        
-        if ESPConnection then
-            ESPConnection:Disconnect()
-        end
-        if PlayerAddedConnection then
-            PlayerAddedConnection:Disconnect()
-        end
-        if PlayerRemovingConnection then
-            PlayerRemovingConnection:Disconnect()
-        end
-    end
-end
-
-Players.PlayerAdded:Connect(function(player)
-    if ESPEnabled then
-        addPlayerESP(player)
-    end
-end)
-
-Players.PlayerRemoving:Connect(function(player)
-    removePlayerESP(player)
-end)
-
-local function RedeemFuckingCoding()
-    local args = {"300KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding2()
-    local args = {"WDEV1"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding3()
-    local args = {"WDEV2"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding4()
-    local args = {"100KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding5()
-    local args = {"70KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding6()
-    local args = {"6OKLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding7()
-    local args = {"20KIN"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding8()
-    local args = {"sorryfordelay"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding9()
-    local args = {"50KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding10()
-    local args = {"100KMEMBERS"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding11()
-    local args = {"40KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding12()
-    local args = {"30KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding13()
-    local args = {"20KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding14()
-    local args = {"10KLIKES"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding15()
-    local args = {"Release2"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding16()
-    local args = {"Release"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding17()
-    local args = {"10KEVENT"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding18()
-    local args = {"Sorryhaha"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding19()
-    local args = {"ISCODEWORKING"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemFuckingCoding20()
-    local args = {"LOVEYOU"}
-    game:GetService("ReplicatedStorage"):WaitForChild("Packets"):WaitForChild("RedeemCode"):InvokeServer(unpack(args))
-end
-
-local function RedeemAllFuckingCodes()
-    RedeemFuckingCoding()
-    wait(0.1)
-    RedeemFuckingCoding2()
-    wait(0.1)
-    RedeemFuckingCoding3()
-    wait(0.1)
-    RedeemFuckingCoding4()
-    wait(0.1)
-    RedeemFuckingCoding5()
-    wait(0.1)
-    RedeemFuckingCoding6()
-    wait(0.1)
-    RedeemFuckingCoding7()
-    wait(0.1)
-    RedeemFuckingCoding8()
-    wait(0.1)
-    RedeemFuckingCoding9()
-    wait(0.1)
-    RedeemFuckingCoding10()
-    wait(0.1)
-    RedeemFuckingCoding11()
-    wait(0.1)
-    RedeemFuckingCoding12()
-    wait(0.1)
-    RedeemFuckingCoding13()
-    wait(0.1)
-    RedeemFuckingCoding14()
-    wait(0.1)
-    RedeemFuckingCoding15()
-    wait(0.1)
-    RedeemFuckingCoding16()
-    wait(0.1)
-    RedeemFuckingCoding17()
-    wait(0.1)
-    RedeemFuckingCoding18()
-    wait(0.1)
-    RedeemFuckingCoding19()
-    wait(0.1)
-    RedeemFuckingCoding20()
-end
-
-local function TpToEveryEntities()
-    if not AutoFightEnabled then
-        return
-    end
-    
-    if not workspace:FindFirstChild("Entities") then
-        return
-    end
-    
-    if not workspace.Entities:FindFirstChild("Zombie") then
-        return
-    end
-    
-    local zombieFolder = workspace.Entities.Zombie
-    local zombieChildren = zombieFolder:GetChildren()
-    
-    if #zombieChildren == 0 then
-        currentIndex = 1
-        return
-    end
-    
-    if currentIndex > #zombieChildren then
-        currentIndex = 1
-    end
-    
-    local currentZombie = zombieChildren[currentIndex]
-    
-    if currentZombie and currentZombie:FindFirstChild("Head") then
-        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            local zombieHead = currentZombie.Head
-            local playerRoot = LocalPlayer.Character.HumanoidRootPart
-            
-            local offset = zombieHead.CFrame.LookVector * -2 
-            local newPosition = zombieHead.Position + offset + Vector3.new(0, 2, 0) 
-            
-            local newCFrame = CFrame.lookAt(newPosition, zombieHead.Position)
-            
-            playerRoot.CFrame = newCFrame
-        end
-    end
-    
-    currentIndex = currentIndex + 1
-end
-
-local function StartAutoFight()
-    if AutoFightEnabled then
-    return
-    end
-    
-    AutoFightEnabled = true
-    currentIndex = 1
-    
-    AutoFightConnection = task.spawn(function()
-        while AutoFightEnabled do
-            TpToEveryEntities()
-            task.wait(0.5) 
-        end
-    end)
-    
-    HitAuraConnection = task.spawn(function()
-        while AutoFightEnabled do
-            FuckingHitAura2()
-            task.wait(0.1)
-        end
-    end)
-end
-
-local function StopAutoFight()
-    if not AutoFightEnabled then 
-    return
-    end
-    
-    AutoFightEnabled = false
-    
-    if AutoFightConnection then
-        task.cancel(AutoFightConnection)
-        AutoFightConnection = nil
-    end
-    
-    if HitAuraConnection then
-        task.cancel(HitAuraConnection)
-        HitAuraConnection = nil
-    end
-end
-
-local function BringAllHumanoidRootParts()
-    if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        return
-    end
-    
-    local playerPosition = LocalPlayer.Character.HumanoidRootPart.Position
-    
-    if workspace:FindFirstChild("Entities") and workspace.Entities:FindFirstChild("Zombie") then
-        local zombieFolder = workspace.Entities.Zombie
-        for _, zombie in pairs(zombieFolder:GetChildren()) do
-            if zombie:FindFirstChild("HumanoidRootPart") then
-                zombie.HumanoidRootPart.CFrame = CFrame.new(playerPosition + Vector3.new(math.random(-2, 3), 0, math.random(-5, 5)))
+local function enableNoclip()
+    if LocalPlayer.Character then
+        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") and part.CanCollide then
+                part.CanCollide = false
             end
         end
     end
+end
+
+local function disableNoclip()
+    if LocalPlayer.Character then
+        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                part.CanCollide = true
+            end
+        end
+    end
+end
+
+local function getAllZombies()
+    local zombies = {}
+    local entitiesFolder = workspace:FindFirstChild("Entities")
     
-    for _, obj in pairs(workspace:GetChildren()) do
-        if obj:IsA("Model") and obj ~= LocalPlayer.Character then
-            if obj:FindFirstChild("HumanoidRootPart") and obj:FindFirstChild("Humanoid") then
-                if not game.Players:GetPlayerFromCharacter(obj) then
-                    obj.HumanoidRootPart.CFrame = CFrame.new(playerPosition + Vector3.new(math.random(-5, 5), 0, math.random(-5, 5)))
+    if entitiesFolder then
+        local zombieFolder = entitiesFolder:FindFirstChild("Zombie")
+        if zombieFolder then
+            for _, zombie in pairs(zombieFolder:GetChildren()) do
+                if zombie:IsA("Model") and zombie:FindFirstChild("HumanoidRootPart") then
+                    table.insert(zombies, zombie)
                 end
             end
         end
     end
-end
-
-local function StartBringAll()
-    if bringConnection then
-        bringConnection:Disconnect()
-    end
     
-    BringAllEnabled = true
-    bringConnection = game:GetService("RunService").Heartbeat:Connect(function()
-        if BringAllEnabled then
-            BringAllHumanoidRootParts()
+    return zombies
+end
+
+local function autoFarmNoclip()
+    if LocalPlayer.Character then
+        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") and part.CanCollide then
+                part.CanCollide = false
+            end
         end
-    end)
-end
-
-local function StopBringAll()
-    BringAllEnabled = false
-    if bringConnection then
-        bringConnection:Disconnect()
-        bringConnection = nil
     end
 end
 
-local function SavePlayerPosition()
-    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        savedPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
-    end
-end
-
-local function LoadPlayerPosition()
-    if savedPosition and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        LocalPlayer.Character.HumanoidRootPart.CFrame = savedPosition
-    end
-end
-
-local function TpToRadio()
-    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        LocalPlayer.Character.HumanoidRootPart.CFrame = RadioPos
-    end
-end
-
-local function TriggerRadioPrompt() 
-    fireproximityprompt(workspace.School.Rooms.RooftopBoss.RadioObjective.ProximityPrompt)
-end
-
-local function AutoRadio() 
-    SavePlayerPosition()
-    wait(0.5)
-    TpToRadio() 
-    wait(0.5)
-    TriggerRadioPrompt() 
-    wait(0.1)
-    LoadPlayerPosition()
-end
-
-local function FireRemote()
-    local args = {
-        buffer.fromstring("\b\006\000")
-    }
-    game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
-end
-
-local function StartLoop()
-    if loopConnection then
-        loopConnection:Disconnect()
-    end
-    
-    loopEnabled = true
-    loopConnection = game:GetService("RunService").Heartbeat:Connect(function()
-        if loopEnabled then
-            FireRemote()
+local function disableAutoFarmNoclip()
+    if LocalPlayer.Character then
+        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
+                part.CanCollide = true
+            end
         end
-    end)
-end
-
-local function StopLoop()
-    loopEnabled = false
-    if loopConnection then
-        loopConnection:Disconnect()
-        loopConnection = nil
     end
 end
 
-local function FireRemote2()
-    local args = {
-        buffer.fromstring("\b\005\000")
-    }
-    game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
-end
-
-local function StartLoop2()
-    if loopConnection2 then
-        loopConnection2:Disconnect()
-    end
-    
-    loopEnabled2 = true
-    loopConnection2 = game:GetService("RunService").Heartbeat:Connect(function()
-        if loopEnabled2 then
-            FireRemote2()
-        end
-    end)
-end
-
-local function StopLoop2()
-    loopEnabled2 = false
-    if loopConnection2 then
-        loopConnection2:Disconnect()
-        loopConnection2 = nil
-    end
-end
-
-local function FireRemote3()
-    local args = {
-        buffer.fromstring("\b\003\000")
-    }
-    game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
-end
-
-local function StartLoop3()
-    if loopConnection3 then
-        loopConnection3:Disconnect()
-    end
-    
-    loopEnabled3 = true
-    loopConnection3 = game:GetService("RunService").Heartbeat:Connect(function()
-        if loopEnabled3 then
-            FireRemote3()
-        end
-    end)
-end
-
-local function StopLoop3()
-    loopEnabled3 = false
-    if loopConnection3 then
-        loopConnection3:Disconnect()
-        loopConnection3 = nil
-    end
-end
-
-local function TeleportToAllDropItems()
+local function stickToZombie(zombie)
     if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-        return
+        return false
     end
     
-    local dropItemsFolder = workspace:FindFirstChild("DropItems")
-    if not dropItemsFolder then
-        return
+    if not zombie or not zombie:FindFirstChild("HumanoidRootPart") then
+        return false
     end
     
-    local items = dropItemsFolder:GetChildren()
-    if #items == 0 then
-        return
+    local humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+    local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+    
+    if stuckConnection then
+        stuckConnection:Disconnect()
+        stuckConnection = nil
     end
     
-    local playerRoot = LocalPlayer.Character.HumanoidRootPart
-    local itemCount = 0
+    autoFarmNoclip()
     
-    for _, item in pairs(items) do
-        if item:IsA("BasePart") then
-            playerRoot.CFrame = CFrame.new(item.Position + Vector3.new(0, 5, 0))
-            itemCount = itemCount + 1
-            wait(0.5) 
-        elseif item:IsA("Model") and item:FindFirstChild("HumanoidRootPart") then
-            playerRoot.CFrame = CFrame.new(item.HumanoidRootPart.Position + Vector3.new(0, 5, 0))
-            itemCount = itemCount + 1
-            wait(0.5)
-        elseif item:IsA("Model") then
-            local part = item:FindFirstChildWhichIsA("BasePart")
-            if part then
-                playerRoot.CFrame = CFrame.new(part.Position + Vector3.new(0, 5, 0))
-                itemCount = itemCount + 1
-                wait(0.5)
-            end
+    local targetPosition = zombie.HumanoidRootPart.Position + Vector3.new(0, attackHeight, 0)
+    
+    local tweenInfo = TweenInfo.new(
+        0.5,
+        Enum.EasingStyle.Quint,
+        Enum.EasingDirection.Out
+    )
+    
+    local tween = TweenService:Create(
+        humanoidRootPart,
+        tweenInfo,
+        {Position = targetPosition}
+    )
+    
+    tween:Play()
+    
+    tween.Completed:Connect(function()
+        if humanoid then
+            humanoid.PlatformStand = true
+            humanoid.WalkSpeed = 0
+            humanoid.JumpPower = 0
         end
-    end
-   
+        
+        stuckConnection = RunService.Heartbeat:Connect(function()
+            if zombie and zombie.Parent and humanoidRootPart and humanoidRootPart.Parent then
+                local newTargetPosition = zombie.HumanoidRootPart.Position + Vector3.new(0, attackHeight, 0)
+                humanoidRootPart.Position = newTargetPosition
+                humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+            else
+                if stuckConnection then
+                    stuckConnection:Disconnect()
+                    stuckConnection = nil
+                end
+            end
+        end)
+    end)
+    
+    return true
 end
 
--- =================thisIsWhere all Now=================
+local function unstickPlayer()
+    if stuckConnection then
+        stuckConnection:Disconnect()
+        stuckConnection = nil
+    end
+    
+    if LocalPlayer.Character then
+        local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.PlatformStand = false
+            humanoid.WalkSpeed = 16
+            humanoid.JumpPower = 50
+        end
+    end
+    
+    disableAutoFarmNoclip()
+end
 
--- ==================Stop============================
-Tabs.PlayerMisc:Toggle({
-    Title = "Enable Fly",
-    Value = false,
-    Callback = function(state)
-        flyToggle = state
-        if flyToggle then
-            if UserInputService.TouchEnabled then
-                MobileFly()
+local function startAutoFarmZombie()
+    autoFarmEnabled = true
+    autoFarmNoclip()
+    
+    autoFarmConnection = task.spawn(function()
+        while autoFarmEnabled do
+            local zombies = getAllZombies()
+            
+            if #zombies > 0 then
+                if currentZombieIndex > #zombies then
+                    currentZombieIndex = 1
+                end
+                
+                local targetZombie = zombies[currentZombieIndex]
+                
+                if stickToZombie(targetZombie) then
+                    WindUI:Notify({
+                        Title = "Farming Zombie",
+                        Content = "Stuck to " .. targetZombie.Name .. " at height " .. attackHeight,
+                        Duration = 1,
+                        Icon = "target",
+                    })
+                    currentZombieIndex = currentZombieIndex + 1
+                    wait(stickDelay)
+                    unstickPlayer()
+                    wait(0.2)
+                else
+                    currentZombieIndex = currentZombieIndex + 1
+                    wait(0.1)
+                end
             else
-                sFLY()
+                wait(5)
             end
+        end
+    end)
+end
+
+local function stopAutoFarmZombie()
+    autoFarmEnabled = false
+    unstickPlayer()
+    
+    if autoFarmConnection then
+        task.cancel(autoFarmConnection)
+        autoFarmConnection = nil
+    end
+    currentZombieIndex = 1
+end
+
+LobbyTab:Section({ 
+    Title = "Weapon",
+    TextXAlignment = "Left",
+    TextSize = 15,
+})
+
+LobbyTab:Dropdown({
+    Title = "Desired  [WEAPON]",
+    Values = Weapons,
+    Value = "Axes",
+    Multi = false,
+    AllowNone = true,
+    Callback = function(option) 
+        selectedWeapon = option
+    end
+})
+
+LobbyTab:Toggle({
+    Title = "AutoSpin [WEAPON]",
+    Desc = "AutoSpin Until you get Desired",
+    Icon = "swords", 
+    Default = false,
+    Callback = function(state) 
+        if state then
+            if selectedWeapon == "" then
+                WindUI:Notify({
+                    Title = "No Desired Selected",
+                    Content = "Select a Desired first!",
+                    Duration = 3,
+                    Icon = "x",
+                })
+                return
+            end
+            
+            PressJ()
+            wait(0.5)
+            isSpinning = true
+            wait(0.5)
+            AutoClick() 
+            
+            spawn(function()
+                while isSpinning do
+                    if CheckForDesiredWeapon() then
+                        isSpinning = false
+                        StopAutoClick() 
+                        WindUI:Notify({
+                            Title = "Got Your Desired! NIGGA",
+                            Content = "Got " .. selectedWeapon .. "! Nice! ",
+                            Duration = 8,
+                            Icon = "check",
+                        })
+                        break
+                    end
+                    
+                    SpinNormal()
+                    wait(spinDelay)
+                end
+            end)
+            
+            WindUI:Notify({
+                Title = "Auto Spin Started",
+                Content = "Target: " .. selectedWeapon,
+                Duration = 3, 
+                Icon = "check",
+            })
         else
-            NOFLY()
-            UnMobileFly()
+            isSpinning = false
+            StopAutoClick() 
         end
     end
 })
 
-Tabs.PlayerMisc:Slider({
+LobbyTab:Section({ 
+    Title = "Perk",
+    TextXAlignment = "Left",
+    TextSize = 15,
+})
+
+LobbyTab:Dropdown({
+    Title = "Desired  [PERK]",
+    Values = Perks,
+    Value = "Undead",
+    Multi = false,
+    AllowNone = true,
+    Callback = function(option) 
+        selectedPerk = option
+    end
+})
+
+LobbyTab:Toggle({
+    Title = "AutoSpin [PERK]",
+    Desc = "AutoSpin Until you get Desired",
+    Icon = "bookmark-check", 
+    Default = false,
+    Callback = function(state) 
+        if state then
+            if selectedPerk == "" then
+                WindUI:Notify({
+                    Title = "No Desired Selected",
+                    Content = "Select a Desired first!",
+                    Duration = 3,
+                    Icon = "x",
+                })
+                return
+            end
+            
+            pressK()
+            wait(0.5)
+            isPerkSpinning = true
+            wait(0.5)
+            AutoClick2() 
+            
+            spawn(function()
+                while isPerkSpinning do
+                    if CheckForDesiredPerks() then
+                        isPerkSpinning = false
+                        StopAutoClickSure() 
+                        WindUI:Notify({
+                            Title = "Got Your Desired!",
+                            Content = "Got " .. selectedPerk .. "! Nice! ",
+                            Duration = 8,
+                            Icon = "check",
+                        })
+                        break
+                    end
+                    
+                    SpinPerk()
+                    wait(SpinPerkDelay)
+                end
+            end)
+            
+            WindUI:Notify({
+                Title = "Auto Spin Started",
+                Content = "Target: " .. selectedPerk,
+                Duration = 3, 
+                Icon = "check",
+            })
+        else
+            isPerkSpinning = false
+            StopAutoClickSure() 
+        end
+    end
+})
+
+LobbyTab:Section({ 
+    Title = "Settings",
+    TextXAlignment = "Left",
+    TextSize = 15,
+})
+
+LobbyTab:Slider({
+    Title = "Spin Delay [WEAPON]",
+    Step = 0.1,
+    
+    Value = {
+        Min = 0.1,
+        Max = 10,
+        Default = 4,
+    },
+    Callback = function(value)
+        spinDelay = value
+    end
+})
+
+LobbyTab:Slider({
+    Title = "Spin Delay [PERK]",
+    Step = 0.1,
+    
+    Value = {
+        Min = 0.1,
+        Max = 10,
+        Default = 4,
+    },
+    Callback = function(value)
+        SpinPerkDelay = value
+    end
+})
+
+-- Settings
+
+SettingTab:Divider()
+SettingTab:Section({ 
+    Title = "UI Settings",
+    TextXAlignment = "Center",
+    TextSize = 20,
+})
+SettingTab:Divider()
+
+SettingTab:Dropdown({
+    Title = "Window Theme",
+    Desc = "",
+    Values = {"Dark", "Light", "Gray", "Blue", "Green", "Purple", "Red", "Midnight Blue", "Dark Blue", "Crimson", "Orange", "Yellow", "Emerald", "Teal", "Cyan", "Indigo", "Pink", "Rose", "Violet", "Forest Green", "Ocean Blue", "Sunset Orange", "Royal Purple", "Cherry Red"},
+    Value = "Dark",
+    Multi = false,
+    AllowNone = false,
+    Callback = function(selectedTheme) 
+        if selectedTheme then
+            WindUI:SetTheme(selectedTheme)
+            
+            WindUI:Notify({
+                Title = "Theme Changed",
+                Content = "Switched to " .. selectedTheme .. " theme!",
+                Duration = 2,
+                Icon = "palette"
+            })
+        end
+    end
+})
+
+SettingTab:Colorpicker({
+    Title = "Custom UI Color [COMING SOON]", 
+    Default = Color3.fromRGB(138, 43, 226),
+    Transparency = 0.5,
+    Locked = false,
+    Callback = function(color) 
+    end
+})
+
+SettingTab:Keybind({
+    Title = "Change MinimizeKey",
+    Desc = "",
+    Value = "F",
+    Callback = function(v)
+        Window:SetToggleKey(Enum.KeyCode[v])
+    end
+})
+
+SettingTab:Toggle({
+    Title = "Transparency",
+    Icon = "eye",
+    Type = "Toggle",
+    Default = getgenv().TransparencyEnabled or false,
+    Callback = function(state)
+        getgenv().TransparencyEnabled = state
+        
+        pcall(function() 
+            Window:ToggleTransparency(state) 
+        end)
+    end
+})
+
+CodeTab:Code({
+    Title = "Codes",
+    Code = [[HZCrafting | B4UPD3 | EMOTEISHERE | HZCrafting2 | 200k67 | 500KLIKES]]
+})
+
+CodeTab:Button({
+    Title = "Redeem All Codes",
+    Desc = "",
+    Locked = false,
+    Callback = function()
+        AllNigga()
+        WindUI:Notify({
+                Title = "Redeem All Codes Successful",
+                Content = "",
+                Duration = 2,
+                Icon = "check"
+            })
+    end
+})
+
+PlayerMiscTab:Slider({
     Title = "Fly Speed",
     Value = { Min = 1, Max = 20, Default = 1 },
     Callback = function(value)
@@ -1314,7 +1654,7 @@ Tabs.PlayerMisc:Slider({
             task.spawn(function()
                 while FLYING do
                     task.wait(0.1)
-                    if UserInputService.TouchEnabled then
+                    if game:GetService("UserInputService").TouchEnabled then
                         local root = Players.LocalPlayer.Character and Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                         if root and root:FindFirstChild("BodyVelocity") then
                             local bv = root:FindFirstChild("BodyVelocity")
@@ -1327,293 +1667,114 @@ Tabs.PlayerMisc:Slider({
     end
 })
 
-Tabs.PlayerMisc:Toggle({
-    Title = "Enable WalkSpeed",
-    Desc = "",
-    Icon = "zap",
-    Type = "Toggle",
-    Default = getgenv().WalkSpeedEnabled,
-    Callback = function(state) 
-        getgenv().WalkSpeedEnabled = state
-        
-        if state then
-            startApplyingSpeed()
-            WindUI:Notify({
-                Title = "WalkSpeed Enabled",
-                Content = "",
-                Duration = 1.5,
-                Icon = "check"
-            })
+PlayerMiscTab:Toggle({
+    Title = "Fly",
+    Icon = "plane",
+    Callback = function(state)
+        flyToggle = state
+        if flyToggle then
+            if game:GetService("UserInputService").TouchEnabled then
+                MobileFly()
+            else
+                sFLY()
+            end
         else
-            stopApplyingSpeed()
+            NOFLY()
+            UnMobileFly()
         end
     end
 })
 
-Tabs.PlayerMisc:Slider({
+PlayerMiscTab:Slider({
     Title = "WalkSpeed",
-    Desc = "",
-    Step = 1,
-    Value = {
-        Min = 1,
-        Max = 100,
-        Default = getgenv().CustomWalkSpeed,
-    },
+    Value = { Min = 1, Max = 200, Default = 16 },
     Callback = function(value)
-        getgenv().CustomWalkSpeed = value
-        
-        if getgenv().WalkSpeedEnabled then
-            applyCustomWalkspeed()
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = value
         end
+     
+        LocalPlayer.CharacterAdded:Connect(function(character)
+            local humanoid = character:WaitForChild("Humanoid")
+            humanoid.WalkSpeed = value
+        end)
     end
 })
 
-Tabs.PlayerMisc:Toggle({
+PlayerMiscTab:Toggle({
     Title = "Noclip",
-    Value = false,
+    Icon = "ghost",
     Callback = function(state)
         if state then
+            enableNoclip()
+            
             noclipConnection = RunService.Stepped:Connect(function()
-                local char = Players.LocalPlayer.Character
-                if char then
-                    for _, part in ipairs(char:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            part.CanCollide = false
-                        end
-                    end
+                enableNoclip()
+            end)
+            
+            LocalPlayer.CharacterAdded:Connect(function()
+                if state then 
+                    wait(0.1)
+                    enableNoclip()
                 end
             end)
+            
+            WindUI:Notify({
+                Title = "Noclip Enabled",
+                Content = "!",
+                Duration = 2,
+                Icon = "check",
+            })
         else
             if noclipConnection then
                 noclipConnection:Disconnect()
                 noclipConnection = nil
             end
+            disableNoclip()
         end
     end
 })
 
-local CombatSection = CombatTab:Section({ 
-    Title = "Combat",
-    TextXAlignment = "Left",
-    TextSize = 20, 
+GameTab:Section({
+  Title = "Combat", 
+  Icon = "skull"
 })
 
-CombatTab:Toggle({
-    Title = "HitAura",
-    Description = "",
-    Default = false,
-    Callback = function(value)
-        hitAuraEnabled = value
-        
-        if hitAuraEnabled then
-            hitAuraConnection = game:GetService("RunService").Heartbeat:Connect(function()
-                if hitAuraEnabled then
-                   FuckingHitAura()
-                end
-            end)
-            
-            WindUI:Notify({
-                Title = "HitAura",
-                Content = "HitAura enabled!",
-                Duration = 3
-            })
-        else
-            if hitAuraConnection then
-                hitAuraConnection:Disconnect()
-                hitAuraConnection = nil
-            end
-        end
-    end
-})
-
-CombatTab:Toggle({
-    Title = "Loop Bring All",
-    Description = "",
-    Default = false,
-    Callback = function(enabled)
-        if enabled then
-            StartBringAll()
-            startLoop() 
-            WindUI:Notify({
-                Title = "LoopBring all",
-                Content = "Loop Bring All Enabled",
-                Duration = 2,
-                Icon = "check"
-            })
-        else
-            StopBringAll()
-        end
-    end,
-})
-
-CombatTab:Button({
-    Title = "Collect All DropItems",
-    Description = "",
-    Callback = function()
-        TeleportToAllDropItems()
-    end,
-})
-
-CombatTab:Button({
-    Title = "AutoRadio",
-    Description = "",
-    Callback = function()
-        AutoRadio() 
-    end,
-})
-
-local CombatSection = CombatTab:Section({ 
-    Title = "Auto",
-    TextXAlignment = "Left",
-    TextSize = 20, 
-})
-
-CombatTab:Toggle({
-    Title = "AutoFight",
-    Description = "",
-    Default = false,
-    Callback = function(enabled)
-        if enabled then
-            StartAutoFight()
-            WindUI:Notify({
-                Title = "AutoFight",
-                Content = "AutoFight Enabled",
-                Duration = 2,
-                Icon = "check"
-            })
-        else
-            StopAutoFight() 
-        end
-    end,
-})
-
-CombatTab:Toggle({
-    Title = "AutoUse Skill 3",
-    Description = "",
-    Default = false,
-    Callback = function(enabled)
-        if enabled then
-            StartLoop()
-            WindUI:Notify({
-                Title = "AutoSkill 3",
-                Content = "AutoSkill 3 Enabled",
-                Duration = 2,
-                Icon = "check"
-            })
-        else
-            StopLoop()
-        end
-    end,
-})
-
-CombatTab:Toggle({
-    Title = "AutoUse Skill 2",
-    Description = "",
-    Default = false,
-    Callback = function(enabled)
-        if enabled then
-            StartLoop2()
-            WindUI:Notify({
-                Title = "AutoSkill 2",
-                Content = "AutoSkill 2Enabled",
-                Duration = 2,
-                Icon = "check"
-            })
-        else
-            StopLoop2()
-        end
-    end,
-})
-
-CombatTab:Toggle({
-    Title = "AutoUse Skill 1",
-    Description = "",
-    Default = false,
-    Callback = function(enabled)
-        if enabled then
-            StartLoop3()
-            WindUI:Notify({
-                Title = "AutoSkill 1",
-                Content = "AutoSkill 1 Enabled",
-                Duration = 2,
-                Icon = "check"
-            })
-        else
-            StopLoop3()
-        end
-    end,
-})
-
-
-EspTab:Section({ 
-    Title = "Entities",
-    TextXAlignment = "Left",
-    TextSize = 20, 
-})
-
-EspTab:Toggle({
-    Title = "Esp Enteties",
+GameTab:Toggle({
+    Title = "AutoTeleport to Zombies",
     Desc = "",
-    Icon = "zap",
-    Type = "Toggle",
-    Default = false,
+    Icon = "sword",
     Callback = function(state)
         if state then
-            EnableESP()
+            startAutoFarmZombie()
             WindUI:Notify({
-                Title = "Esp ",
-                Content = "Esp Enabled",
-                Duration = 2,
-                Icon = "check"
+                Title = "AutoTp Started",
+                Content = "!",
+                Duration = 3,
+                Icon = "check",
             })
         else
-            DisableESP()
+            stopAutoFarmZombie()
         end
     end
 })
 
-local EspSection = EspTab:Section({ 
-    Title = "Players",
-    TextXAlignment = "Left",
-    TextSize = 20, 
-})
-
-EspTab:Toggle({
-    Title = "Esp Players",
+GameTab:Slider({
+    Title = "Teleport Height",
     Desc = "",
-    Icon = "zap",
-    Type = "Toggle",
-    Default = false,
-    Callback = function(enabled)
-        if enabled then
-            enableESP()
-        else
-            DisableESP()
-        end
+    Value = { Min = -4, Max = 4, Default = -2 },
+    Callback = function(value)
+        attackHeight = value
     end
 })
 
-CodesTab:Section({ 
-    Title = "Codes",
-    TextXAlignment = "Left",
-    TextSize = 20, 
+GameTab:Slider({
+    Title = "Teleport Delay",
+    Desc = "",
+    Step = 0.1,
+    Value = { Min = 1, Max = 10, Default = 3 },
+    Callback = function(value)
+        stickDelay = value
+    end
 })
 
-CodesTab:Paragraph({
-    Title = "Expired",
-    Desc = "Hugecode WDEV1 WDEV2 100KLIKES 70KLIKES 6OKLIKES 20KIN sorryfordelay 50KLIKES 100KMEMBERS 40KLIKES 30KLIKES 20KLIKES 10KLIKES Release2 Release10KEVENT Sorryhaha Press Redeem all button to  Get",
-    Locked = false,
-    Buttons = {
-        {
-            Icon = "zap",
-            Title = "Redeem All Codes",
-            Callback = function() RedeemAllFuckingCodes() end,
-        }
-    }
-}) 
-
-CodesTab:Paragraph({
-    Title = "ELV",
-    Desc = "if they not working its expired dont worry ill change it everytime they released an new code",
-    Locked = false,
-    })
+Game:Divider()

@@ -678,10 +678,10 @@ if IsPc then
   if not string.find(executor, "Wave") or not string.find(executor, "AWP") then
     Fluent:Notify({Title = "Free Script",Content = "Bug!!!!",SubContent = "",Duration = 15})
   else
-    Fluent:Notify({Title = "Free Script",Content = "Nice",SubContent = "Chúc bạn chơi game vv!",Duration = 15})
+    Fluent:Notify({Title = "Free Script",Content = "Nice",SubContent = "Opensource Keyless Script",Duration = 15})
   end
 else
-  Fluent:Notify({Title = "Free Script",Content = "Nice",SubContent = "Chúc bạn chơi game vv!",Duration = 15})
+  Fluent:Notify({Title = "Free Script",Content = "Nice",SubContent = "Opensource Keyless Script",Duration = 15})
 end
 
 local FarmLevel = Tabs.Main:AddToggle("FarmLevel", {Title = "Auto Farm Level", Description = "", Default = false})
@@ -6851,4 +6851,3 @@ task.spawn(function()
   end)
 end)
 Window:SelectTab(1)
-)

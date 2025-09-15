@@ -1236,21 +1236,12 @@ Games:CreateButton({
     end
 })
 
--- Grow A Garden (NoLagHub)
+-- Grow A Garden (ThanHub)
 Games:CreateButton({
-    Name = "Grow A Garden (NoLagHub)",
+    Name = "Grow A Garden (ThanHub)",
     Description = nil,
     Callback = function()
-        repeat wait() until game:IsLoaded() and game.Players.LocalPlayer
-        local scripts = {
-            [126884695634066] = "https://raw.githubusercontent.com/NoLag-id/No-Lag-HUB/refs/heads/main/Garden/Garden-V1.lua",
-            [81440632616906] = "https://raw.githubusercontent.com/NoLag-id/No-Lag-HUB/refs/heads/main/DigEarth/V1.lua",
-        }
-        local url = scripts[game.PlaceId]
-        if url then
-            loadstring(game:HttpGetAsync(url))()
-            loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/NoLag-id/No-Lag-HUB/refs/heads/main/untitled.lua"))()
-        end
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/thantzy/thanhub/refs/heads/main/thanv1"))()
     end
 })
 
@@ -1260,6 +1251,15 @@ Games:CreateButton({
     Description = nil,
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/MoziIOnTop/MoziIHub/refs/heads/main/GrowaGarden"))()
+    end
+})
+
+-- Hide the body
+Games:CreateButton({
+    Name = "Hide The Body",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/DVkt43Ch/raw"))()
     end
 })
 

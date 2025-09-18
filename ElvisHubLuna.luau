@@ -1196,7 +1196,7 @@ Games:CreateButton({
     Name = "99 Nights In The Forest (Axiora)",
     Description = nil,
     Callback = function()
-        loadstring(game:HttpGet("https://gist.githubusercontent.com/SuperHackerYT/e22c0bda26cc6c75544aa71f778f44ba/raw/6c8c5e123d4499b46580b7c328ae034c69f72a7f/AxioraScripts;99Nights"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-Main/AXS-Script/refs/heads/main/AXS-HUB/99/Nights/in/the/Forest/Loader3"))()
     end
 })
 
@@ -1223,7 +1223,7 @@ Games:CreateButton({
     Name = "Build A Plane (Axiora)",
     Description = nil,
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-HUB2/AXS-ScriptS/refs/heads/main/AXS-HUB/Main/Loader"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-Main/AXS-Script/refs/heads/main/AXS-HUB/99/Nights/in/the/Forest/Loader3"))()
     end
 })
 
@@ -1232,7 +1232,7 @@ Games:CreateButton({
     Name = "Doors (Axiora)",
     Description = nil,
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-HUB2/AXS-ScriptS/refs/heads/main/AXS-HUB/Main/Loader"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-Main/AXS-Script/refs/heads/main/AXS-HUB/99/Nights/in/the/Forest/Loader3"))()
     end
 })
 
@@ -1268,7 +1268,7 @@ Games:CreateButton({
     Name = "Hunty Zombies (Axiora)",
     Description = nil,
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-HUB2/AXS-ScriptS/refs/heads/main/AXS-HUB/Main/Loader"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-Main/AXS-Script/refs/heads/main/AXS-HUB/99/Nights/in/the/Forest/Loader3"))()
     end
 })
 

@@ -32,7 +32,7 @@ do
     WindUI:Popup(
         {
             Title = gradient("ElvisHub Loaded! - Murder Mystery 2", Color3.fromHex("#ff0000"), Color3.fromHex("#000000")),
-            Icon = "rbxassetid://62346237",
+            Icon = "rbxassetid://82795327169782",
             Content = gradient("+ Version: Sigma", Color3.fromHex("#ffffff"), Color3.fromHex("#ffffff")) ..
                 gradient(" [ELVISHUB OFFICIAL]", Color3.fromHex("#ff0000"), Color3.fromHex("#000000")),
             Buttons = {

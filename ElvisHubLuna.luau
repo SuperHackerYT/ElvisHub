@@ -1196,15 +1196,6 @@ Games:CreateButton({
     Name = "99 Nights In The Forest (Spolarium)",
     Description = nil,
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/AXS-Main/AXS-Script/refs/heads/main/AXS-HUB/99/Nights/in/the/Forest/Loader3"))()
-    end
-})
-
--- 99 Nights In The Forest (ToastyXD Hub)
-Games:CreateButton({
-    Name = "99 Nights In The Forest (ToastyXD)",
-    Description = nil,
-    Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/skibidi/refs/heads/main/obfuscated_script-1761298760643.lua"))()
     end
 })

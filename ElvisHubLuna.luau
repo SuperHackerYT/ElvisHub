@@ -2,7 +2,7 @@ local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHac
 
 local Window = Luna:CreateWindow({
 	Name = "Elvis Hub - Luna",
-	Subtitle = "A powerful script hub",
+	Subtitle = "Everything you needed",
 	LogoID = "82795327169782",
 	LoadingEnabled = true,
 	LoadingTitle = "Elvis Hub - Luna",
@@ -12,21 +12,6 @@ local Window = Luna:CreateWindow({
 		RootFolder = nil,
 		ConfigFolder = "ElvisHubLuna"
 	},
-
-	KeySystem = false,
-	KeySettings = {
-		Title = "Elvis Hub Luna",
-		Subtitle = "Key System",
-		Note = "Please get the key and enter.",
-		SaveInRoot = false,
-		SaveKey = true,
-		Key = {"1234"},
-		SecondAction = {
-			Enabled = true,
-			Type = "Link", -- You can also put discord as an option, if your are doing that, donâ€™t include discord.gg as Luna will auto add it as a prefix, just replace it with your identifier, example, if your are doing discord.gg/mspaint, just use mspaint.
-			Parameter = ""
-		}
-	}
 })
 
 Window:CreateHomeTab({
@@ -141,8 +126,8 @@ local function NOFLY()
     if mfly1 then mfly1:Disconnect() end
     if mfly2 then mfly2:Disconnect() end
     if lp.Character:FindFirstChildOfClass('Humanoid') then
-        lp.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
-    end
+lp.Character:FindFirstChildOfClass('Humanoid').PlatformStand = false
+end
 end
 
 -- Mobile Fly
@@ -765,6 +750,15 @@ Scripts:CreateButton({
     end
 })
 
+-- Keyboard Script
+Scripts:CreateButton({
+    Name = "Mobile Keyboard (Delta Keyboard)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Xxtan31/Ata/main/deltakeyboardcrack.txt", true))()
+    end
+})
+
 Scripts:CreateDivider()
 
 Scripts:CreateSection("Chat Bypassers")
@@ -796,6 +790,14 @@ Scripts:CreateButton({
 Scripts:CreateDivider()
 
 Scripts:CreateSection("FE Scripts (NO GUIS)")
+
+Scripts:CreateButton({
+	Name = "Open YouTube",
+	Description = "Watch youtube without leaving game",
+	Callback = function()
+	loadstring(game:HttpGet("https://paste.rs/cGICv"))()
+	end
+})
 
 Scripts:CreateButton({
 	Name = "FE Telekinesis",
@@ -978,9 +980,26 @@ Scripts:CreateButton({
 	end
 })
 
+Scripts:CreateButton({
+	Name = "Desync",
+	Description = "Desynces you from other people's screens",
+	Callback = function()
+		loadstring(game:HttpGet("https://pastefy.app/8zQ57jls/raw"))()
+	end
+})
+
 Scripts:CreateDivider()
 
 Scripts:CreateSection("FE Scripts (GUIS)")
+
+-- FE Browser GUI
+Scripts:CreateButton({
+	Name = "FE Browser (Mobile Only)",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://paste.rs/Fe5G7"))()
+	end
+})
 
 -- FE Trolling GUI
 Scripts:CreateButton({
@@ -1063,6 +1082,15 @@ Scripts:CreateButton({
     end
 })
 
+-- FE Invisible V2
+Scripts:CreateButton({
+    Name = "FE Invisible V2",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/Invisible%20Mode'))()
+    end
+})
+
 -- FE Equip Multiple Tools
 Scripts:CreateButton({
     Name = "FE Equip Multiple Tools",
@@ -1106,6 +1134,15 @@ Scripts:CreateButton({
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/L"))()
     end
+})
+
+-- FE Translator
+Scripts:CreateButton({
+	Name = "FE Google Translate",
+	Description = nil,
+	Callback = function()
+	     loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/Translator'))()
+	end
 })
 
 Scripts:CreateDivider()
@@ -1200,6 +1237,42 @@ Games:CreateButton({
     end
 })
 
+-- 99 Nights In The Forest (Voidware)
+Games:CreateButton({
+    Name = "99 Nights In The Forest (Voidware)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeVoidware/VW-Add/main/nightsintheforest.lua", true))()
+    end
+})
+
+-- BladeBall (Argon)
+Games:CreateButton({
+	Name = "Blade Ball (Argon)",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/SoyAdriYT/PitbullHubX/refs/heads/main/PitbullHubX.lua", true))()
+	end
+})
+
+-- BloxFruits (ThunderZ)
+Games:CreateButton({
+    Name = "BloxFruits (ThunderZ)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ThunderZ-HUB/HUB/main/Script"))()
+    end
+})
+
+-- BloxFruits (BlueX)
+Games:CreateButton({
+    Name = "BloxFruits (BlueX)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))()
+    end
+})
+
 -- BlueLock Rivals (Fearise)
 Games:CreateButton({
     Name = "Blue Lock Rivals (Fearise)",
@@ -1215,6 +1288,15 @@ Games:CreateButton({
     Description = nil,
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/thantzy/thanhub/refs/heads/main/thanv1"))()
+    end
+})
+
+-- Grow A Garden (ThunderZ)
+Games:CreateButton({
+    Name = "Grow A Garden (ThunderZ)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ThunderZ-HUB/HUB/main/Script"))()
     end
 })
 
@@ -1236,6 +1318,15 @@ Games:CreateButton({
     end
 })
 
+-- Plants VS Brainrots (Blue X)
+Games:CreateButton({
+	Name = "Plants VS Brainrots (Blue X)",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Dev-BlueX/BlueX-Hub/refs/heads/main/Main.lua"))()
+	end
+})
+
 -- Rivals (Zeferus)
 Games:CreateButton({
     Name = "Rivals (Zeferus)",
@@ -1243,6 +1334,24 @@ Games:CreateButton({
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/necode102/-loader-100/refs/heads/main/loader.lua"))()
     end
+})
+
+-- Slap Battles (Badges Hub)
+Games:CreateButton({
+	Name = "Slap Battles (Badges Hub)",
+	Description = "Script to get any badges in slap battles with no effort",
+	Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/IncognitoScripts/SlapBattles/main/BadgesHub", true))()
+	end
+})
+
+-- Slap Battles (Sans Glove)
+Games:CreateButton({
+	Name = "Slap Battles (Sans Glove)",
+	Description = "Get Sans Glove Automatically and Become Sans",
+	Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/IncognitoScripts/SlapBattles/main/SansComeback", true))()
+	end
 })
 
 -- Steal A Brainrot (Ajjan)
@@ -1269,6 +1378,15 @@ Games:CreateButton({
 	Description = nil,
 	Callback = function()
 	loadstring(game:HttpGet("https://rawscripts.net/raw/Survive-the-Killer!-Pedro-Group-STK-43390"))()
+	end
+})
+
+-- The Strongest Battlegrounds (CPS)
+Games:CreateButton({
+	Name = "The Strongest Battlegrounds (CPS)",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/hellattexyss/cpsautoblockbeta/refs/heads/main/cpscombatbeta.lua"))()
 	end
 })
 
@@ -1370,7 +1488,7 @@ Server:CreateToggle({
             _G.ShutdownNotifier = game:GetService("CoreGui").RobloxPromptGui.promptOverlay.ChildAdded:Connect(function(obj)
                 if obj.Name == "ErrorPrompt" then
                     game.StarterGui:SetCore("SendNotification", {
-                        Title = "⚠️ Server Notice";
+                        Title = "â ï¸ Server Notice";
                         Text = "The server is shutting down!";
                         Duration = 10;
                     })
@@ -1395,7 +1513,7 @@ Server:CreateButton({
 
         -- Show a Luna notification
         Luna:Notification({ 
-            Title = "📡 Ping Check",
+            Title = "ð¡ Ping Check",
             Icon = "network_check",
             ImageSource = "Material",
             Content = "Your current ping is: "..ping.." ms"
@@ -1432,6 +1550,22 @@ Server:CreateButton({
 		if Lowest then
 			TeleportService:TeleportToPlaceInstance(PlaceId, Lowest.id, Players.LocalPlayer)
 		end
+	end
+})
+
+-- Join Bot Servers
+Server:CreateButton({
+	Name = "Join Server With Bots",
+	Callback = function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREE-PRIVATE-SERVER-V2-59627"))()
+	end
+})
+
+-- Free Private Server GUI
+Server:CreateButton({
+	Name = "Free Private Servers GUI",
+	Callback = function()
+	loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-FREE-PRIVATE-SERVER-GUI-ANY-GAME-55939"))()
 	end
 })
 

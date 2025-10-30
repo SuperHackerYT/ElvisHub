@@ -1,3 +1,5 @@
+game:GetService("CoreGui").RobloxGui["CoreScripts/NetworkPause"]:Destroy()
+
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/ElvisHub/refs/heads/main/lunauisourcebutmod.lua", true))()
 
 local Window = Luna:CreateWindow({

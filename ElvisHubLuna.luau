@@ -1,5 +1,8 @@
 game:GetService("CoreGui").RobloxGui["CoreScripts/NetworkPause"]:Destroy()
 
+local UIS = game:GetService("UserInputService")
+local LP = game:GetService("Players").LocalPlayer or game.Players.PlayerAdded:Wait()
+
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/ElvisHub/refs/heads/main/lunauisourcebutmod.lua", true))()
 
 local Window = Luna:CreateWindow({
@@ -282,6 +285,35 @@ local Gravity = Main:CreateSlider({
 	end
 }, "Gravity")
 
+local InfiniteJump = Main:CreateToggle({
+	Name = "Infinite Jump",
+	CurrentValue = false,
+	Flag = "InfiniteJump",
+	Callback = function(Value)
+		getgenv().InfiniteJumpEnabled = Value
+	end
+}, "InfiniteJump")
+
+local function SetupInfiniteJump()
+	UIS.JumpRequest:Connect(function()
+		if getgenv().InfiniteJumpEnabled then
+			local char = LP.Character
+			if char and char:FindFirstChildOfClass("Humanoid") then
+				char:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+			end
+		end
+	end)
+end
+
+LP.CharacterAdded:Connect(function()
+	task.wait(1)
+	SetupInfiniteJump()
+end)
+
+if LP.Character then
+	SetupInfiniteJump()
+end
+
 Main:CreateDivider()
 
 Main:CreateSection("Protection")
@@ -368,7 +400,7 @@ Main:CreateDivider()
 Main:CreateSection("Troll")
 
 local WalkFling = Main:CreateToggle({
-	Name = "Walk Fling",
+	Name = "WalkFling",
 	CurrentValue = false,
 	Callback = function(Value)
 		local player = game.Players.LocalPlayer
@@ -667,6 +699,42 @@ end)
 
 Main:CreateDivider()
 
+Main:CreateSection("Others")
+
+Main:CreateButton({
+	Name = "Enable Day Time",
+	Callback = function()
+		game.Lighting.ClockTime = 12
+		game.Lighting.Brightness = 2
+		game.Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+	end
+})
+
+Main:CreateButton({
+	Name = "Enable Night Time",
+	Callback = function()
+		game.Lighting.ClockTime = 0
+		game.Lighting.Brightness = 1
+		game.Lighting.OutdoorAmbient = Color3.fromRGB(100, 100, 150)
+	end
+})
+
+Main:CreateToggle({
+	Name = "X-Ray",
+	CurrentValue = false,
+	Flag = "XRay",
+	Callback = function(Value)
+		getgenv().XRayEnabled = Value
+		for _, v in pairs(workspace:GetDescendants()) do
+			if v:IsA("BasePart") then
+				v.LocalTransparencyModifier = Value and 0.5 or 0
+			end
+		end
+	end
+}, "XRay")
+
+Main:CreateDivider()
+
 local Scripts = Window:CreateTab({
 	Name = "Scripts",
 	Icon = "chat",
@@ -758,6 +826,15 @@ Scripts:CreateButton({
     Description = nil,
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Xxtan31/Ata/main/deltakeyboardcrack.txt", true))()
+    end
+})
+
+-- Scripts and AntiCheat Searcher
+Scripts:CreateButton({
+    Name = "Scripts & AntiCheat Searcher",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Script-searcher-56910"))()
     end
 })
 

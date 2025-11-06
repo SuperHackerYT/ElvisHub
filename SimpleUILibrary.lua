@@ -1,4 +1,4 @@
--- SimpleUI
+-- Fixed SimpleUI (no double-click, no instant toggle off)
 local SimpleUI = {}
 SimpleUI.__index = SimpleUI
 
@@ -78,7 +78,7 @@ function SimpleUI:CreateWindow(title)
 		container.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
 	end)
 
-	-- Draggable (fixed shared InputChanged)
+	-- Draggable (per-window connection)
 	local dragging = false
 	local startPos, startInput
 	titleBar.InputBegan:Connect(function(input)
@@ -102,7 +102,7 @@ function SimpleUI:CreateWindow(title)
 		end
 	end)
 
-	-- Minimize Icon (fixed shared InputChanged)
+	-- Minimize Icon
 	local icon = Instance.new("TextButton")
 	icon.Size = UDim2.new(0, 50, 0, 50)
 	icon.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -155,7 +155,7 @@ function SimpleUI:CreateWindow(title)
 	return {Frame = frame, Container = container, Icon = icon}
 end
 
--- Button: prevent double-fire
+-- Button: single fire
 function SimpleUI:AddButton(window, text, callback)
 	local btn = Instance.new("TextButton")
 	btn.Size = UDim2.new(1, -10, 0, 40)
@@ -169,20 +169,11 @@ function SimpleUI:AddButton(window, text, callback)
 
 	local c = Instance.new("UICorner", btn); c.CornerRadius = UDim.new(0, 6)
 
-	local clicking = false
-	btn.MouseButton1Down:Connect(function()
-		clicking = true
-	end)
-	btn.MouseButton1Up:Connect(function()
-		if clicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
-			callback()
-		end
-		clicking = false
-	end)
+	btn.MouseButton1Click:Connect(callback)
 	btn.TouchTap:Connect(callback)
 end
 
--- Toggle: prevent double
+-- Toggle: stable, no instant off
 function SimpleUI:AddToggle(window, text, default, callback)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, -10, 0, 40)
@@ -210,23 +201,16 @@ function SimpleUI:AddToggle(window, text, default, callback)
 	local c = Instance.new("UICorner", toggle); c.CornerRadius = UDim.new(0, 12)
 
 	local state = default
-	local clicking = false
 	local function flip()
 		state = not state
 		toggle.BackgroundColor3 = state and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(100, 100, 100)
 		callback(state)
 	end
-	toggle.MouseButton1Down:Connect(function() clicking = true end)
-	toggle.MouseButton1Up:Connect(function()
-		if clicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
-			flip()
-		end
-		clicking = false
-	end)
+	toggle.MouseButton1Click:Connect(flip)
 	toggle.TouchTap:Connect(flip)
 end
 
--- Dropdown: prevent double
+-- Dropdown: single fire
 function SimpleUI:AddDropdown(window, text, options, defaultIndex, callback)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, -10, 0, 40)
@@ -288,16 +272,10 @@ function SimpleUI:AddDropdown(window, text, options, defaultIndex, callback)
 		btn.AutoButtonColor = false
 		btn.ZIndex = 11
 		btn.Parent = list
-
-		local clicking = false
-		btn.MouseButton1Down:Connect(function() clicking = true end)
-		btn.MouseButton1Up:Connect(function()
-			if clicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
-				drop.Text = opt
-				list.Visible = false
-				callback(opt, i)
-			end
-			clicking = false
+		btn.MouseButton1Click:Connect(function()
+			drop.Text = opt
+			list.Visible = false
+			callback(opt, i)
 		end)
 		btn.TouchTap:Connect(function()
 			drop.Text = opt
@@ -306,18 +284,11 @@ function SimpleUI:AddDropdown(window, text, options, defaultIndex, callback)
 		end)
 	end
 
-	local dropClicking = false
-	drop.MouseButton1Down:Connect(function() dropClicking = true end)
-	drop.MouseButton1Up:Connect(function()
-		if dropClicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
-			list.Visible = not list.Visible
-		end
-		dropClicking = false
-	end)
+	drop.MouseButton1Click:Connect(function() list.Visible = not list.Visible end)
 	drop.TouchTap:Connect(function() list.Visible = not list.Visible end)
 end
 
--- Slider & TextInput unchanged (no double issue)
+-- Slider & TextInput unchanged
 function SimpleUI:AddSlider(window, text, min, max, default, callback)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, -10, 0, 60)

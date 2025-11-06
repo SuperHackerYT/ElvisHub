@@ -1,5 +1,4 @@
--- Simple UI
-
+-- SimpleUI
 local SimpleUI = {}
 SimpleUI.__index = SimpleUI
 
@@ -79,7 +78,7 @@ function SimpleUI:CreateWindow(title)
 		container.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
 	end)
 
-	-- Mobile/PC Draggable
+	-- Draggable (fixed shared InputChanged)
 	local dragging = false
 	local startPos, startInput
 	titleBar.InputBegan:Connect(function(input)
@@ -87,21 +86,23 @@ function SimpleUI:CreateWindow(title)
 			dragging = true
 			startPos = frame.Position
 			startInput = input.Position
-		end
-	end)
-	UIS.InputChanged:Connect(function(input)
-		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-			local delta = input.Position - startInput
-			frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		end
-	end)
-	UIS.InputEnded:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			dragging = false
+			local conn
+			conn = UIS.InputChanged:Connect(function(i)
+				if dragging and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
+					local delta = i.Position - startInput
+					frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+				end
+			end)
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+					conn:Disconnect()
+				end
+			end)
 		end
 	end)
 
-	-- Minimize Icon
+	-- Minimize Icon (fixed shared InputChanged)
 	local icon = Instance.new("TextButton")
 	icon.Size = UDim2.new(0, 50, 0, 50)
 	icon.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -120,17 +121,19 @@ function SimpleUI:CreateWindow(title)
 			iconDrag = true
 			iconStart = icon.Position
 			iconInput = i.Position
-		end
-	end)
-	UIS.InputChanged:Connect(function(i)
-		if iconDrag and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-			local d = i.Position - iconInput
-			icon.Position = UDim2.new(iconStart.X.Scale, iconStart.X.Offset + d.X, iconStart.Y.Scale, iconStart.Y.Offset + d.Y)
-		end
-	end)
-	UIS.InputEnded:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			iconDrag = false
+			local conn
+			conn = UIS.InputChanged:Connect(function(inp)
+				if iconDrag and (inp.UserInputType == Enum.UserInputType.MouseMovement or inp.UserInputType == Enum.UserInputType.Touch) then
+					local d = inp.Position - iconInput
+					icon.Position = UDim2.new(iconStart.X.Scale, iconStart.X.Offset + d.X, iconStart.Y.Scale, iconStart.Y.Offset + d.Y)
+				end
+			end)
+			i.Changed:Connect(function()
+				if i.UserInputState == Enum.UserInputState.End then
+					iconDrag = false
+					conn:Disconnect()
+				end
+			end)
 		end
 	end)
 
@@ -152,6 +155,7 @@ function SimpleUI:CreateWindow(title)
 	return {Frame = frame, Container = container, Icon = icon}
 end
 
+-- Button: prevent double-fire
 function SimpleUI:AddButton(window, text, callback)
 	local btn = Instance.new("TextButton")
 	btn.Size = UDim2.new(1, -10, 0, 40)
@@ -165,10 +169,20 @@ function SimpleUI:AddButton(window, text, callback)
 
 	local c = Instance.new("UICorner", btn); c.CornerRadius = UDim.new(0, 6)
 
-	btn.MouseButton1Click:Connect(callback)
+	local clicking = false
+	btn.MouseButton1Down:Connect(function()
+		clicking = true
+	end)
+	btn.MouseButton1Up:Connect(function()
+		if clicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
+			callback()
+		end
+		clicking = false
+	end)
 	btn.TouchTap:Connect(callback)
 end
 
+-- Toggle: prevent double
 function SimpleUI:AddToggle(window, text, default, callback)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, -10, 0, 40)
@@ -196,83 +210,23 @@ function SimpleUI:AddToggle(window, text, default, callback)
 	local c = Instance.new("UICorner", toggle); c.CornerRadius = UDim.new(0, 12)
 
 	local state = default
+	local clicking = false
 	local function flip()
 		state = not state
 		toggle.BackgroundColor3 = state and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(100, 100, 100)
 		callback(state)
 	end
-	toggle.MouseButton1Click:Connect(flip)
+	toggle.MouseButton1Down:Connect(function() clicking = true end)
+	toggle.MouseButton1Up:Connect(function()
+		if clicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
+			flip()
+		end
+		clicking = false
+	end)
 	toggle.TouchTap:Connect(flip)
 end
 
-function SimpleUI:AddSlider(window, text, min, max, default, callback)
-	local frame = Instance.new("Frame")
-	frame.Size = UDim2.new(1, -10, 0, 60)
-	frame.BackgroundTransparency = 1
-	frame.Parent = window.Container
-
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.new(1, 0, 0, 20)
-	label.BackgroundTransparency = 1
-	label.Text = text .. ": " .. default
-	label.TextColor3 = Color3.fromRGB(255, 255, 255)
-	label.Font = Enum.Font.Gotham
-	label.TextSize = 16
-	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Parent = frame
-
-	local track = Instance.new("Frame")
-	track.Size = UDim2.new(1, 0, 0, 12)
-	track.Position = UDim2.new(0, 0, 0, 30)
-	track.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-	track.Parent = frame
-
-	local fill = Instance.new("Frame")
-	fill.Size = UDim2.new((default - min)/(max - min), 0, 1, 0)
-	fill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-	fill.Parent = track
-
-	local knob = Instance.new("Frame")
-	knob.Size = UDim2.new(0, 28, 0, 28)
-	knob.Position = UDim2.new(fill.Size.X.Scale - 0.5, -14, 0.5, -14)
-	knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	knob.ZIndex = 2
-	knob.Parent = track
-
-	local c1 = Instance.new("UICorner", track); c1.CornerRadius = UDim.new(0, 6)
-	local c2 = Instance.new("UICorner", fill); c2.CornerRadius = UDim.new(0, 6)
-	local c3 = Instance.new("UICorner", knob); c3.CornerRadius = UDim.new(1, 0)
-
-	local dragging = false
-	local startX
-	local function update(pos)
-		local rel = math.clamp((pos.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
-		local val = math.floor(min + rel * (max - min) + 0.5)
-		fill.Size = UDim2.new(rel, 0, 1, 0)
-		knob.Position = UDim2.new(rel, -14, 0.5, -14)
-		label.Text = text .. ": " .. val
-		callback(val)
-	end
-
-	track.InputBegan:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			startX = i.Position.X
-			update(i.Position)
-		end
-	end)
-	UIS.InputChanged:Connect(function(i)
-		if dragging and (i.UserInputType == Enum.UserInputType.MouseMovement or i.UserInputType == Enum.UserInputType.Touch) then
-			update(i.Position)
-		end
-	end)
-	UIS.InputEnded:Connect(function(i)
-		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
-			dragging = false
-		end
-	end)
-end
-
+-- Dropdown: prevent double
 function SimpleUI:AddDropdown(window, text, options, defaultIndex, callback)
 	local frame = Instance.new("Frame")
 	frame.Size = UDim2.new(1, -10, 0, 40)
@@ -334,10 +288,16 @@ function SimpleUI:AddDropdown(window, text, options, defaultIndex, callback)
 		btn.AutoButtonColor = false
 		btn.ZIndex = 11
 		btn.Parent = list
-		btn.MouseButton1Click:Connect(function()
-			drop.Text = opt
-			list.Visible = false
-			callback(opt, i)
+
+		local clicking = false
+		btn.MouseButton1Down:Connect(function() clicking = true end)
+		btn.MouseButton1Up:Connect(function()
+			if clicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
+				drop.Text = opt
+				list.Visible = false
+				callback(opt, i)
+			end
+			clicking = false
 		end)
 		btn.TouchTap:Connect(function()
 			drop.Text = opt
@@ -346,8 +306,84 @@ function SimpleUI:AddDropdown(window, text, options, defaultIndex, callback)
 		end)
 	end
 
-	drop.MouseButton1Click:Connect(function() list.Visible = not list.Visible end)
+	local dropClicking = false
+	drop.MouseButton1Down:Connect(function() dropClicking = true end)
+	drop.MouseButton1Up:Connect(function()
+		if dropClicking and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) == false then
+			list.Visible = not list.Visible
+		end
+		dropClicking = false
+	end)
 	drop.TouchTap:Connect(function() list.Visible = not list.Visible end)
+end
+
+-- Slider & TextInput unchanged (no double issue)
+function SimpleUI:AddSlider(window, text, min, max, default, callback)
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(1, -10, 0, 60)
+	frame.BackgroundTransparency = 1
+	frame.Parent = window.Container
+
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.new(1, 0, 0, 20)
+	label.BackgroundTransparency = 1
+	label.Text = text .. ": " .. default
+	label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	label.Font = Enum.Font.Gotham
+	label.TextSize = 16
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.Parent = frame
+
+	local track = Instance.new("Frame")
+	track.Size = UDim2.new(1, 0, 0, 12)
+	track.Position = UDim2.new(0, 0, 0, 30)
+	track.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+	track.Parent = frame
+
+	local fill = Instance.new("Frame")
+	fill.Size = UDim2.new((default - min)/(max - min), 0, 1, 0)
+	fill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+	fill.Parent = track
+
+	local knob = Instance.new("Frame")
+	knob.Size = UDim2.new(0, 28, 0, 28)
+	knob.Position = UDim2.new(fill.Size.X.Scale - 0.5, -14, 0.5, -14)
+	knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	knob.ZIndex = 2
+	knob.Parent = track
+
+	local c1 = Instance.new("UICorner", track); c1.CornerRadius = UDim.new(0, 6)
+	local c2 = Instance.new("UICorner", fill); c2.CornerRadius = UDim.new(0, 6)
+	local c3 = Instance.new("UICorner", knob); c3.CornerRadius = UDim.new(1, 0)
+
+	local dragging = false
+	local function update(pos)
+		local rel = math.clamp((pos.X - track.AbsolutePosition.X) / track.AbsoluteSize.X, 0, 1)
+		local val = math.floor(min + rel * (max - min) + 0.5)
+		fill.Size = UDim2.new(rel, 0, 1, 0)
+		knob.Position = UDim2.new(rel, -14, 0.5, -14)
+		label.Text = text .. ": " .. val
+		callback(val)
+	end
+
+	track.InputBegan:Connect(function(i)
+		if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			update(i.Position)
+			local conn
+			conn = UIS.InputChanged:Connect(function(inp)
+				if dragging and (inp.UserInputType == Enum.UserInputType.MouseMovement or inp.UserInputType == Enum.UserInputType.Touch) then
+					update(inp.Position)
+				end
+			end)
+			i.Changed:Connect(function()
+				if i.UserInputState == Enum.UserInputState.End then
+					dragging = false
+					conn:Disconnect()
+				end
+			end)
+		end
+	end)
 end
 
 function SimpleUI:AddTextInput(window, placeholder, default, callback)

@@ -2,6 +2,7 @@ game:GetService("CoreGui").RobloxGui["CoreScripts/NetworkPause"]:Destroy()
 
 local UIS = game:GetService("UserInputService")
 local LP = game:GetService("Players").LocalPlayer or game.Players.PlayerAdded:Wait()
+local Camera = workspace.CurrentCamera
 
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/ElvisHub/refs/heads/main/lunauisourcebutmod.lua", true))()
 
@@ -735,6 +736,113 @@ Main:CreateToggle({
 
 Main:CreateDivider()
 
+Main:CreateSection("Aim Assist")
+
+Main:CreateToggle({
+	Name = "Aimbot",
+	CurrentValue = false,
+	Flag = "Aimbot",
+	Callback = function(Value)
+		getgenv().AimbotEnabled = Value
+	end
+}, "Aimbot")
+
+Main:CreateToggle({
+	Name = "Team Check",
+	CurrentValue = false,
+	Flag = "TeamCheck",
+	Callback = function(Value)
+		getgenv().TeamCheckEnabled = Value
+	end
+}, "TeamCheck")
+
+local function GetClosestPlayer()
+	local Closest, ClosestDist = nil, math.huge
+	for _, plr in pairs(Players:GetPlayers()) do
+		if plr ~= LP and plr.Character and plr.Character:FindFirstChild("Head") then
+			if not (getgenv().TeamCheckEnabled and plr.Team == LP.Team) then
+				local pos, onScreen = Camera:WorldToViewportPoint(plr.Character.Head.Position)
+				if onScreen then
+					local dist = (Vector2.new(pos.X, pos.Y) - UIS:GetMouseLocation()).Magnitude
+					if dist < ClosestDist then
+						Closest, ClosestDist = plr, dist
+					end
+				end
+			end
+		end
+	end
+	return Closest
+end
+
+RunService.RenderStepped:Connect(function()
+	if getgenv().AimbotEnabled then
+		local target = GetClosestPlayer()
+		if target and target.Character and target.Character:FindFirstChild("Head") then
+			Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Character.Head.Position)
+		end
+	end
+end)
+
+Main:CreateToggle({
+	Name = "Crosshair",
+	CurrentValue = false,
+	Flag = "Crosshair",
+	Callback = function(Value)
+		getgenv().CrosshairEnabled = Value
+
+		if Value then
+			if not game.CoreGui:FindFirstChild("CustomCrosshair") then
+				local ScreenGui = Instance.new("ScreenGui")
+				ScreenGui.Name = "CustomCrosshair"
+				ScreenGui.ResetOnSpawn = false
+				ScreenGui.Parent = game.CoreGui
+
+				local cross = Instance.new("Frame")
+				cross.Name = "Cross"
+				cross.Size = UDim2.new(0, 4, 0, 4)
+				cross.Position = UDim2.new(0.5, -2, 0.5, -2)
+				cross.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+				cross.BorderSizePixel = 0
+				cross.Parent = ScreenGui
+			end
+		else
+			local crossGui = game.CoreGui:FindFirstChild("CustomCrosshair")
+			if crossGui then
+				crossGui:Destroy()
+			end
+		end
+	end
+}, "Crosshair")
+
+Main:CreateToggle({
+	Name = "Auto Trigger",
+	CurrentValue = false,
+	Flag = "AutoTrigger",
+	Callback = function(Value)
+		getgenv().AutoTriggerEnabled = Value
+	end
+}, "AutoTrigger")
+
+RunService.RenderStepped:Connect(function()
+	if getgenv().AutoTriggerEnabled then
+		local mouse = UIS:GetMouseLocation()
+		local ray = Camera:ViewportPointToRay(mouse.X, mouse.Y)
+		local raycastParams = RaycastParams.new()
+		raycastParams.FilterDescendantsInstances = {LP.Character}
+		raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+
+		local result = workspace:Raycast(ray.Origin, ray.Direction * 1000, raycastParams)
+		if result and result.Instance and result.Instance.Parent then
+			local plr = Players:GetPlayerFromCharacter(result.Instance.Parent)
+			if plr and plr ~= LP then
+				mouse1click()
+			end
+		end
+	end
+end)
+
+Main:CreateDivider()
+
 local Scripts = Window:CreateTab({
 	Name = "Scripts",
 	Icon = "chat",
@@ -1309,10 +1417,19 @@ Games:CreateSection("Hubs for games")
 
 -- 99 Nights In The Forest (Spolarium)
 Games:CreateButton({
-    Name = "99 Nights In The Forest (Spolarium)",
+    Name = "99 Nights In The Forest (Spolarium - Discontinued)",
     Description = nil,
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/skibidi/refs/heads/main/obfuscated_script-1761298760643.lua"))()
+    end
+})
+
+-- 99 Nights In The Forest (H4x)
+Games:CreateButton({
+    Name = "99 Nights In The Forest (H4x)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/H4xScripts/Loader/refs/heads/main/loader.lua", true))()
     end
 })
 

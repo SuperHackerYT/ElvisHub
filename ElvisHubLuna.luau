@@ -4,7 +4,7 @@ local UIS = game:GetService("UserInputService")
 local LP = game:GetService("Players").LocalPlayer or game.Players.PlayerAdded:Wait()
 local Camera = workspace.CurrentCamera
 
-local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/ElvisHub/refs/heads/main/lunauisourcebutmod.lua", true))()
+local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/master/source.lua", true))()
 
 local Window = Luna:CreateWindow({
 	Name = "Elvis Hub - Luna",
@@ -22,8 +22,23 @@ local Window = Luna:CreateWindow({
 
 Window:CreateHomeTab({
 	SupportedExecutors = {
-		"All",
-		"Everything"
+		"Delta",
+		"Ronix",
+		"Codex",
+		"Trigon",
+		"Vega X",
+		"Arceus",
+		"Arceus NEW",
+		"Krnl",
+		"Evon",
+		"JJSploit",
+		"Xeno",
+		"Wave",
+		"Volcano",
+		"Bunni.lol",
+		"Seliware",
+		"Solara",
+		"Potassium"
 		},
 	DiscordInvite = "7zyT99D7S3",
 	Icon = 1
@@ -1067,6 +1082,14 @@ Scripts:CreateButton({
 })
 
 Scripts:CreateButton({
+	Name = "FE Sonic New",
+	Description = nil,
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/Azizanzz0/FE-R15-Sonic-X-Super/refs/heads/main/Protected%20SonicXSuper.txt"))()
+	end
+})
+
+Scripts:CreateButton({
 	Name = "FE Ragdoll",
 	Description = nil,
 	Callback = function()
@@ -1415,12 +1438,12 @@ local Games = Window:CreateTab({
 
 Games:CreateSection("Hubs for games")
 
--- 99 Nights In The Forest (Spolarium)
+-- 99 Nights In The Forest (Apex)
 Games:CreateButton({
-    Name = "99 Nights In The Forest (Spolarium - Discontinued)",
+    Name = "99 Nights In The Forest (Apex)",
     Description = nil,
     Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/skibidi/refs/heads/main/obfuscated_script-1761298760643.lua"))()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/Apex-Softworks/refs/heads/main/99%20Nights%20In%20The%20Forest.luau"))()
     end
 })
 
@@ -1475,6 +1498,15 @@ Games:CreateButton({
     Description = nil,
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/EnesXVC/Games-Scripts/main/Blue-Lock-Fearise-Hub"))()
+    end
+})
+
+-- Fish it
+Games:CreateButton({
+    Name = "Fish it (Apex)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/SuperHackerYT/Apex-Softworks/refs/heads/main/Fish%20it.luau"))()
     end
 })
 

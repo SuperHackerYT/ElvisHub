@@ -903,6 +903,15 @@ Scripts:CreateButton({
 	end
 })
 
+-- Reviz Admin
+Scripts:CreateButton({
+	Name = "Reviz Admin",
+	Description = ":D",
+    Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/Pa1ntex/reviz-admin-v2-script-FE/refs/heads/main/Reviz%20admin%20v2%20FE"))()
+	end
+})
+
 Scripts:CreateDivider()
 
 Scripts:CreateSection("Other")
@@ -970,6 +979,14 @@ Scripts:CreateButton({
 	Description = "Best Chat-Bypasser but have a KeySystem",
     Callback = function()
 	loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua"))()
+	end
+})
+
+Scripts:CreateButton({
+	Name = "F0gg0t Chat Bypasser",
+	Description = "Skibidi",
+    Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/FOGOTY/bypasschat/refs/heads/main/script"))()
 	end
 })
 
@@ -1194,7 +1211,15 @@ Scripts:CreateButton({
 	Name = "Desync",
 	Description = "Desynces you from other people's screens",
 	Callback = function()
-		loadstring(game:HttpGet("https://pastefy.app/8zQ57jls/raw"))()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/kingdos227/-/refs/heads/main/?.lua"))()
+	end
+})
+
+Scripts:CreateButton({
+	Name = "FPS Boost",
+	Description = "This is an old fps boost script",
+	Callback = function()
+		loadstring(game:HttpGet("https://pastebin.com/raw/8YZ2cc6V"))()
 	end
 })
 
@@ -1208,6 +1233,51 @@ Scripts:CreateButton({
 	Description = nil,
 	Callback = function()
 	loadstring(game:HttpGet("https://paste.rs/Fe5G7"))()
+	end
+})
+
+-- FE Universal FPS Game Hack GUI
+Scripts:CreateButton({
+	Name = "FE FPS Games Hack GUI",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://shorturl.at/RNzPa"))()
+	end
+})
+
+-- FE Scriptblox Searcher
+Scripts:CreateButton({
+	Name = "FE Scriptblox Searcher",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/chillz-workshop/main/ScriptSearcher"))()
+	end
+})
+
+-- FE RGB Keystrokes
+Scripts:CreateButton({
+	Name = "FE RGB Keystrokes GUI",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://pastebin.com/raw/bfMQkskC"))()
+	end
+})
+
+-- FE Chat Draw
+Scripts:CreateButton({
+	Name = "FE Chat Draw",
+	Description = nil,
+	Callback = function()
+	 loadstring(game:HttpGet("https://raw.githubusercontent.com/AKadminlol/Chatdraw/refs/heads/main/Chattdraw"))()
+	end
+})
+
+-- FE Universal Auto Clicker
+Scripts:CreateButton({
+	Name = "Universal Auto Clicker",
+	Description = "I think it's for pc",
+	Callback = function()
+		loadstring(game:HttpGetAsync("https://pastebin.com/raw/WgkcDYUs"))()
 	end
 })
 
@@ -1238,6 +1308,15 @@ Scripts:CreateButton({
     end
 })
 
+-- FE Animations GUI
+Scripts:CreateButton({
+    Name = "FE Animations GUI (R6 / R15)",
+    Description = nil,
+    Callback = function()
+        loadstring(game:HttpGet("https://binfor.do.am/Scripts/energize.html"))()
+    end
+})
+
 -- FE Animations Player
 Scripts:CreateButton({
     Name = "FE Animations Player",
@@ -1245,6 +1324,15 @@ Scripts:CreateButton({
     Callback = function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Idk12384/Animation-Player-Script/refs/heads/main/Main%20Code"))()
     end
+})
+
+-- FE Stare At People
+Scripts:CreateButton({
+	Name = "FE Stare at people",
+	Description = "I know you like to watch kids",
+    Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/hassanxzayn-lua/NEOXHUBMAIN/refs/heads/main/stare"))()
+	end
 })
 
 -- FE Super Lag
@@ -1274,6 +1362,15 @@ Scripts:CreateButton({
 	end
 })
 
+-- FE Faker R15
+Scripts:CreateButton({
+	Name = "FE Faker R15 (Animation) ",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://pastebin.com/raw/zyxsYYd9"))()
+	end
+})
+
 -- FE Jerk Off R6
 Scripts:CreateButton({
     Name = "FE Jerk Off R6",
@@ -1292,13 +1389,31 @@ Scripts:CreateButton({
     end
 })
 
--- FE Invisible V2
+-- FE Invisible 2
 Scripts:CreateButton({
-    Name = "FE Invisible V2",
+    Name = "FE Invisible 2",
     Description = nil,
     Callback = function()
         loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/refs/heads/main/Invisible%20Mode'))()
     end
+})
+
+-- FE Invisible 3 
+Scripts:CreateButton({
+	Name = "FE Invisible 3",
+	Description = nil,
+	Callback = function()
+		loadstring(game:HttpGet("https://pastebin.com/raw/3Rnd9rHf"))()
+	end
+})
+
+-- FE Sus Hub
+Scripts:CreateButton({
+	Name = "FE Sus Hub",
+	Description = nil,
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/cnPthPiGon/RamDRuomFirirueieiid8didj/refs/heads/main/Fe%20sus%20hub"))()
+	end
 })
 
 -- FE Equip Multiple Tools
@@ -1609,6 +1724,24 @@ Games:CreateButton({
 	end
 })
 
+-- The Forge (Airflow)
+Games:CreateButton({
+	Name = "The Forge (Airflow)",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://airflowscript.com/loader"))()
+	end
+})
+
+-- The Forge (ToastyXD)
+Games:CreateButton({
+	Name = "The Forge (ToastyXD)",
+	Description = nil,
+	Callback = function()
+	loadstring(game:HttpGet("https://raw.githubusercontent.com/nouralddin-abdullah/ToastyHub-XD/refs/heads/main/hub-main.lua"))()
+	end
+})
+
 -- The Strongest Battlegrounds (CPS)
 Games:CreateButton({
 	Name = "The Strongest Battlegrounds (CPS)",
@@ -1859,14 +1992,13 @@ local UserInput = Server:CreateInput({
 	PlaceholderText = "Enter Player Username",
 	CurrentValue = "",
 	Numeric = false,
-	Enter = true, -- press enter to confirm
+	Enter = true,
 	Callback = function(User)
 		local TeleportService = game:GetService("TeleportService")
 		local Players = game:GetService("Players")
 		local HttpService = game:GetService("HttpService")
 
 		if User ~= "" then
-			-- Try to fetch their userId
 			local success, result = pcall(function()
 				return HttpService:JSONDecode(game:HttpGet("https://users.roblox.com/v1/usernames/users", true, {
 					usernames = {User}

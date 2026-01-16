@@ -6,10 +6,10 @@ local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/rel
 
 local Confirmed = false
 WindUI:Popup({
-    Title = "Elvis Hub | Build A Plane",
+    Title = "Kren Xcript | Build A Plane",
     Icon = "zap",
     IconThemed = true,
-    Content = "Elvis Hub - A keyless hub you been looking for! (Please wait 3 - 5 seconds as the UI loading)",
+    Content = "Kren Script - A keyless Script you been looking for! (Please wait 3 - 5 seconds as the UI loading)",
     Buttons = {
         { Title = "Exit", Variant = "Secondary", Callback = function() game.Players.LocalPlayer:Kick("Why did you click Exit? <=3") end, },
         { Title = "Continue", Icon = "arrow-right", Callback = function() Confirmed = true end, Variant = "Primary" }
@@ -221,7 +221,7 @@ end)
 task.wait(5)
 WindUI:Notify({
                 Title = "Info", 
-                Content = "Made By Elvis. Subscribe to Elvis Gaming. @elvisgamingroblox on YouTube. ",
+                Content = "Made By Kren. NOTE:This Script is in BETA expect bugs. ",
                 Duration = 15,
                 Icon = "badge-info"
             })
